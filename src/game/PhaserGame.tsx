@@ -2,6 +2,7 @@ import { useLayoutEffect } from "react";
 import Phaser from "phaser";
 import { Preloader } from "./scenes/Preloader";
 import { Game } from "./scenes/Game";
+import { FireScene } from "./scenes/Fire";
 
 export function PhaserGame() {
   useLayoutEffect(() => {
@@ -14,7 +15,7 @@ export function PhaserGame() {
       height,
       parent: "game-container",
       backgroundColor: "#212529",
-      scene: [Preloader, Game],
+      scene: [Preloader, Game, FireScene],
       physics: {
         default: "arcade",
         arcade: {

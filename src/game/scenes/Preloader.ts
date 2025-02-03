@@ -20,6 +20,8 @@ export class Preloader extends Scene {
     this.load.setPath("assets");
 
     // Load game assets
+    // Set the asset path
+    this.load.image("fire", "fire.png"); // Load a flame texture
     this.load.image("asset-name", "asset-name.extname");
 
     // Load complete handler
