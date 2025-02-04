@@ -22,7 +22,10 @@ export class Preloader extends Scene {
     // Load game assets
     // Set the asset path
     this.load.image("fire", "fire.png"); // Load a flame texture
-    this.load.image("asset-name", "asset-name.extname");
+    this.load.image("earth", "earth.png");
+    this.load.image("mars", "mars.png");
+    this.load.image("rocket", "rocket.png");
+    this.load.image("outer-space-1", "outer-space-1.png");
 
     // Load complete handler
     this.load.on("complete", () => {
