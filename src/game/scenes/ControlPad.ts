@@ -1,5 +1,4 @@
 import { Scene } from "phaser";
-import { EventBus } from "../EventBus";
 
 export class ControlPadScene extends Scene {
   private pad!: Phaser.GameObjects.Graphics;
@@ -62,11 +61,7 @@ export class ControlPadScene extends Scene {
 
     this.ball.setPosition(this.padCenter.x + dx, this.padCenter.y + dy);
 
-    // // Normalize values (-1 to 1 range) and flip Y-axis behavior
-    // const normalizedX = dx / this.maxDistance;
-    // const normalizedY = -dy / this.maxDistance; // Flip Y-axis behavior
-
-    const scaleFactor = 200; // Adjust this as needed
+    const scaleFactor = 1; // Adjust this as needed
 
     // Normalize values (-1 to 1 range)
     const normalizedX = (dx / this.maxDistance) * scaleFactor;
@@ -74,11 +69,11 @@ export class ControlPadScene extends Scene {
 
     // Emit movement event to control the rocket
 
-    EventBus.emit("padMove", { x: normalizedX, y: normalizedY });
+    this.game.events.emit("padMove", { x: normalizedX, y: normalizedY });
   }
 
   private stopDrag() {
     this.ball.setPosition(this.padCenter.x, this.padCenter.y);
-    EventBus.emit("padMove", { x: 0, y: 0 });
+    this.game.events.emit("padMove", { x: 0, y: 0 });
   }
 }
