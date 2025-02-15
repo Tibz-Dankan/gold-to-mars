@@ -1,31 +1,144 @@
+// import { Scene } from "phaser";
+// import { EventBus } from "../EventBus";
+
+// export class Game extends Scene {
+//   private rocket!: Phaser.Physics.Arcade.Sprite;
+
+//   constructor() {
+//     super("Game");
+//   }
+
+//   create() {
+//     const { width, height } = this.scale.gameSize;
+
+//     // Set background
+//     const background = this.add.image(0, 0, "outer-space-1").setOrigin(0);
+//     background.setDisplaySize(width, height);
+
+//     // Add Earth and Mars
+//     const earth = this.add
+//       .image(width * 0.15, height / 2, "earth")
+//       .setScale(0.5);
+//     const mars = this.add.image(width * 0.85, height / 2, "mars").setScale(0.5);
+
+//     // Create the rocket
+//     this.rocket = this.physics.add
+//       .sprite(width * 0.2, height / 2, "rocket")
+//       .setScale(0.5);
+//     this.rocket.setCollideWorldBounds(true);
+
+//     // Listen to pad movement events from React
+//     EventBus.on("padMove", this.handlePadMove, this);
+//   }
+
+//   handlePadMove(direction: { x: number; y: number }) {
+//     const acceleration = 1.2;
+//     this.rocket.setVelocity(
+//       direction.x * acceleration,
+//       direction.y * acceleration
+//     );
+//     this.rocket.rotation = Math.atan2(direction.y, direction.x);
+//   }
+// }
+
+// import { Scene } from "phaser";
+// import { EventBus } from "../EventBus";
+
+// export class Game extends Scene {
+//   private rocket!: Phaser.Physics.Arcade.Sprite;
+
+//   constructor() {
+//     super("Game");
+//   }
+
+//   create() {
+//     const { width, height } = this.scale.gameSize;
+
+//     // Set background
+//     const background = this.add.image(0, 0, "outer-space-1").setOrigin(0);
+//     background.setDisplaySize(width, height);
+
+//     // Add Earth and Mars
+//     const earth = this.add
+//       .image(width * 0.15, height / 2, "earth")
+//       .setScale(0.5);
+//     const mars = this.add.image(width * 0.85, height / 2, "mars").setScale(0.5);
+
+//     // Create the rocket
+//     this.rocket = this.physics.add
+//       .sprite(width * 0.2, height / 2, "rocket")
+//       .setScale(0.5);
+//     this.rocket.setCollideWorldBounds(true);
+
+//     // Make the rocket initially point toward Mars
+//     const angleToMars = Phaser.Math.Angle.Between(
+//       this.rocket.x,
+//       this.rocket.y,
+//       mars.x,
+//       mars.y
+//     );
+//     this.rocket.setRotation(angleToMars);
+
+//     // Listen to pad movement events from React
+//     EventBus.on("padMove", this.handlePadMove, this);
+//   }
+
+//   handlePadMove(direction: { x: number; y: number }) {
+//     const acceleration = 1.2;
+//     this.rocket.setVelocity(
+//       direction.x * acceleration,
+//       direction.y * acceleration
+//     );
+//   }
+// }
+
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 
 export class Game extends Scene {
-  private rocket!: Phaser.GameObjects.Image;
+  private rocket!: Phaser.Physics.Arcade.Sprite;
 
   constructor() {
     super("Game");
   }
 
   create() {
-    const { width, height } = this.sys.game.canvas;
+    const { width, height } = this.scale.gameSize;
 
-    // Set the background image to cover the entire game canvas
+    // Set background
     const background = this.add.image(0, 0, "outer-space-1").setOrigin(0);
-    background.setDisplaySize(width, height); // Stretch to fit canvas
+    background.setDisplaySize(width, height);
 
-    // Place Earth on the left side
+    // Add Earth and Mars
     const earth = this.add
-      .image(width * 0.2, height / 2, "earth")
-      .setOrigin(0.5);
+      .image(width * 0.15, height / 2, "earth")
+      .setScale(0.5);
+    const mars = this.add.image(width * 0.85, height / 2, "mars").setScale(0.5);
 
-    // Place Mars on the right side
-    const mars = this.add.image(width * 0.8, height / 2, "mars").setOrigin(0.5);
+    // Create the rocket
+    this.rocket = this.physics.add
+      .sprite(width * 0.2, height / 2, "rocket")
+      .setScale(0.5);
+    this.rocket.setCollideWorldBounds(true);
 
-    // Place Rocket above Earth
-    this.rocket = this.add
-      .image(earth.x, earth.y - 100, "rocket")
-      .setOrigin(0.5);
+    // Make the rocket initially point toward Mars
+    const angleToMars = Phaser.Math.Angle.Between(
+      this.rocket.x,
+      this.rocket.y,
+      mars.x,
+      mars.y
+    );
+    this.rocket.setRotation(angleToMars);
+
+    // Listen to pad movement events from PadControlScene
+    EventBus.on("padMove", this.handlePadMove, this);
+  }
+
+  handlePadMove(direction: { x: number; y: number }) {
+    const acceleration = 1.2;
+    this.rocket.setVelocity(
+      direction.x * acceleration,
+      direction.y * acceleration
+    );
   }
 }
