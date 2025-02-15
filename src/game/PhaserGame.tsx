@@ -3,11 +3,12 @@ import Phaser from "phaser";
 import { Preloader } from "./scenes/Preloader";
 import { Game } from "./scenes/Game";
 import { FireScene } from "./scenes/Fire";
+import { ControlPadScene } from "./scenes/ControlPad";
 
 export function PhaserGame() {
   useLayoutEffect(() => {
-    const width = window.innerWidth * 0.8;
-    const height = window.innerHeight * 0.6;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
     const config = {
       type: Phaser.AUTO,
@@ -15,7 +16,7 @@ export function PhaserGame() {
       height,
       parent: "game-container",
       backgroundColor: "#212529",
-      scene: [Preloader, Game, FireScene],
+      scene: [Preloader, Game, FireScene, ControlPadScene],
       physics: {
         default: "arcade",
         arcade: {
@@ -27,21 +28,18 @@ export function PhaserGame() {
 
     const game = new Phaser.Game(config as any);
 
+    game.events.once("ready", () => {
+      game.scene.start("ControlPadScene"); // Start the ControlPadScene manually
+    });
+
     // Handle resizing without zoom animation
     const resizeGame = () => {
-      const newWidth = window.innerWidth * 0.8;
-      const newHeight = window.innerHeight * 0.6;
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
       game.scale.resize(newWidth, newHeight); // Resize the canvas to fit the new dimensions
     };
 
     window.addEventListener("resize", resizeGame);
-
-    game.events.on("ready", () => {
-      const canvas = document.querySelector("canvas");
-      if (canvas) {
-        canvas.style.borderRadius = "8px";
-      }
-    });
 
     return () => {
       game.destroy(true);
@@ -51,7 +49,7 @@ export function PhaserGame() {
 
   return (
     <div id="game-container" className="relative">
-      <div className="">Game controls here</div>
+      <div className="absolute top-2 left-2">Game controls here</div>
     </div>
   );
 }
