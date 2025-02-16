@@ -1,4 +1,3 @@
-import { color } from "framer-motion";
 import { addCommasToNumber } from "../../utils/addCommaToNumber";
 
 interface RocketSpeedAltitudeTableProps {
