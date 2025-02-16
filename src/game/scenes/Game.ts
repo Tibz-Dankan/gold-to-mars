@@ -47,6 +47,12 @@ export class Game extends Scene {
     this.lastUpdateTime = performance.now();
 
     this.game.events.on("padMove", this.handlePadMove, this);
+    EventBus.on(
+      "acceleration",
+      ({ acceleration }: { acceleration: number }) => {
+        console.log("acceleration:", acceleration);
+      }
+    );
   }
 
   handlePadMove(direction: { x: number; y: number }) {

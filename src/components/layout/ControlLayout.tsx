@@ -2,6 +2,7 @@ import React from "react";
 // import { ControlPad } from "../UI/ControlPad";
 import { RocketStatusDisplay } from "../UI/RocketStatusDisplay";
 import { RocketEngineControlsLayout } from "./RocketEngineControlsLayout";
+import { RocketCampusLayout } from "./RocketCampusLayout";
 
 export const ControlLayout: React.FC = () => {
   return (
@@ -10,6 +11,7 @@ export const ControlLayout: React.FC = () => {
      gap-8 bg-pink-500s bg-slate-800"
     >
       <RocketStatusDisplay />
+      <RocketCampusLayout />
       <RocketEngineControlsLayout />
       {/* <ControlPad /> */}
     </div>
