@@ -6,8 +6,8 @@ import { RocketFlame } from "./components/UI/RocketFlame";
 function App() {
   return (
     <div>
-      <RocketFlame />
-      <EventBridge />
+      {/* <RocketFlame /> */}
+      {/* <EventBridge /> */}
       <PhaserGame />
     </div>
   );

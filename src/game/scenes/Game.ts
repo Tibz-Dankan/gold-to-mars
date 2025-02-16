@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import { EventBus } from "../EventBus";
 
 export class Game extends Scene {
   private rocket!: Phaser.Physics.Arcade.Sprite;
@@ -59,8 +60,8 @@ export class Game extends Scene {
   update() {
     const currentTime = performance.now();
 
-    // Run the update logic only if at least 200ms have passed
-    if (currentTime - this.lastUpdateTime < 200) return;
+    // Run the update logic only if at least 100ms have passed
+    if (currentTime - this.lastUpdateTime < 100) return;
 
     const dt = (currentTime - this.lastUpdateTime) / 1000; // Convert to seconds
 
@@ -92,6 +93,7 @@ export class Game extends Scene {
 
     //  Emit real-time data
     this.game.events.emit("rocketStatus", { speed, altitude, planet });
+    EventBus.emit("rocketStatus", { speed, altitude, planet });
 
     // Update last position and time
     this.lastX = this.rocket.x;
