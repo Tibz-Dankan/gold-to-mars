@@ -5,7 +5,7 @@ import { Game } from "./scenes/Game";
 import { FireScene } from "./scenes/Fire";
 import { ControlPadScene } from "./scenes/ControlPad";
 import { RocketStatusDisplayScene } from "./scenes/RocketStatusDisplay";
-// import { ControlLayout } from "../components/layout/ControlLayout";
+import { ControlLayout } from "../components/layout/ControlLayout";
 
 export function PhaserGame() {
   useLayoutEffect(() => {
@@ -39,6 +39,7 @@ export function PhaserGame() {
     game.events.once("ready", () => {
       game.scene.start("ControlPadScene");
       game.scene.start("RocketStatusDisplayScene");
+      game.scene.start("FireScene");
     });
 
     // Handle resizing without zoom animation
@@ -57,11 +58,11 @@ export function PhaserGame() {
   }, []);
 
   return (
-    <div id="game-container" className="relative">
+    <div id="game-container" className="relative overflow-hidden">
       <div className="absolute top-2 left-2">Game controls here</div>
-      {/* <div className="w-full absolute bottom-2 left-2">
+      <div className="w-fulls absolute bottom-2 left-2">
         <ControlLayout />
-      </div> */}
+      </div>
     </div>
   );
 }
