@@ -60,7 +60,7 @@ export function PhaserGame() {
   return (
     <div id="game-container" className="relative overflow-hidden">
       <div className="absolute top-2 left-2">Game controls here</div>
-      <div className="w-fulls absolute bottom-2 left-2">
+      <div className="w-fulls absolute bottom-4 left-4">
         <ControlLayout />
       </div>
     </div>

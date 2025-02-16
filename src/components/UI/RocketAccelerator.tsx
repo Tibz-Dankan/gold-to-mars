@@ -26,7 +26,7 @@ export const RocketAccelerator: React.FC = () => {
   };
 
   return (
-    <div className="w-full flex justify-center py-10 bg-slate-700 rounded-md px-8">
+    <div className="w-full flex justify-center py-10 bg-slate-700 rounded-lg px-8">
       <div
         ref={trackRef}
         className="relative w-40 h-4 bg-gray-400"

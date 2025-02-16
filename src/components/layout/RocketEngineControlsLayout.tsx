@@ -43,7 +43,7 @@ export const RocketEngineControlsLayout: React.FC = () => {
   console.log("Engine Status: ", engineStatus);
 
   return (
-    <div className="bg-slate-800 p-2 rounded-lg flex flex-col gap-1 items-center justify-center">
+    <div className=" rounded-lg flex flex-col gap-1 items-center justify-center">
       <RocketEngineControlSwitch
         label="Shutdown Engine"
         onCheckHandler={onShutdownEngineHandler}

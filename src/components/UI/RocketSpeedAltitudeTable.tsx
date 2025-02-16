@@ -21,10 +21,10 @@ export const RocketSpeedAltitudeTable: React.FC<
           className="h-8 [&>*]:border-y-[1px] [&>*]:border-gray-400 
              text-[12px] font-[400]"
         >
-          <td className="px-2 pl-4 border-x-[1px] border-gray-400 rounded-tl-sm">
+          <td className="px-2 pl-4 border-x-[1px] border-gray-400 rounded-tl-lg">
             Speed
           </td>
-          <td className="px-2 border-r-[1px] border-gray-400 rounded-tr-sm w-28">
+          <td className="px-2 border-r-[1px] border-gray-400 rounded-tr-lg w-28">
             {addCommasToNumber(parseFloat(props.speed.toFixed(2)))} km/hr
           </td>
         </tr>
@@ -43,11 +43,11 @@ export const RocketSpeedAltitudeTable: React.FC<
           className="h-8 [&>*]:border-b-[1px] [&>*]:border-gray-400 
              text-[12px] font-[400]"
         >
-          <td className="px-2 pl-4 border-x-[1px] border-gray-400 rounded-bl-sm">
+          <td className="px-2 pl-4 border-x-[1px] border-gray-400 rounded-bl-lg">
             Planet
           </td>
           <td
-            className={`px-2 border-r-[1px] border-gray-400 rounded-br-sm font-bold
+            className={`px-2 border-r-[1px] border-gray-400 rounded-br-lg font-bold
             `}
             style={{ color: isEarth ? earthBluish : marsReddishOrange }}
           >
