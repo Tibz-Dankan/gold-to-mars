@@ -169,7 +169,6 @@ export const RocketCampus: React.FC = () => {
       ctx.lineTo(rocketX + triangleSize / 2, rocketY + triangleSize / 2);
       ctx.lineTo(rocketX - triangleSize / 2, rocketY + triangleSize / 2);
       ctx.closePath();
-      //   ctx.fillStyle = "blue";
       ctx.fillStyle = "#37b24d";
       ctx.fill();
 
