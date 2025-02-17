@@ -49,7 +49,7 @@ export const RocketCampus: React.FC = () => {
       // Green Circle (Campus boundary)
       ctx.beginPath();
       ctx.arc(centerX, centerY, width / 2, 0, 2 * Math.PI);
-      ctx.strokeStyle = "green";
+      ctx.strokeStyle = "#868e96";
       ctx.lineWidth = 2;
       ctx.stroke();
 
@@ -59,7 +59,7 @@ export const RocketCampus: React.FC = () => {
       ctx.lineTo(centerX, height);
       ctx.moveTo(0, centerY);
       ctx.lineTo(width, centerY);
-      ctx.strokeStyle = "green";
+      ctx.strokeStyle = "#868e96";
       ctx.stroke();
 
       // Sun
@@ -67,6 +67,8 @@ export const RocketCampus: React.FC = () => {
       ctx.beginPath();
       ctx.arc(centerX, centerY, sunRadius, 0, 2 * Math.PI);
       ctx.fillStyle = "#FFD700";
+      //   ctx.fillStyle = "#FFFAF0";
+
       ctx.fill();
 
       // Earth and Orbit
@@ -167,7 +169,8 @@ export const RocketCampus: React.FC = () => {
       ctx.lineTo(rocketX + triangleSize / 2, rocketY + triangleSize / 2);
       ctx.lineTo(rocketX - triangleSize / 2, rocketY + triangleSize / 2);
       ctx.closePath();
-      ctx.fillStyle = "blue";
+      //   ctx.fillStyle = "blue";
+      ctx.fillStyle = "#37b24d";
       ctx.fill();
 
       // Distance Display (Use current Earth/Mars distance)
