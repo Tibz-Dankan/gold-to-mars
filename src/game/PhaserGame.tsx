@@ -6,6 +6,7 @@ import { FireScene } from "./scenes/Fire";
 import { ControlPadScene } from "./scenes/ControlPad";
 import { RocketStatusDisplayScene } from "./scenes/RocketStatusDisplay";
 import { ControlLayout } from "../components/layout/ControlLayout";
+import { TravellingScene } from "./scenes/Travelling";
 
 export function PhaserGame() {
   useLayoutEffect(() => {
@@ -24,6 +25,7 @@ export function PhaserGame() {
         FireScene,
         ControlPadScene,
         RocketStatusDisplayScene,
+        TravellingScene,
       ],
       physics: {
         default: "arcade",
@@ -39,6 +41,7 @@ export function PhaserGame() {
     game.events.once("ready", () => {
       game.scene.start("ControlPadScene");
       game.scene.start("RocketStatusDisplayScene");
+      game.scene.start("TravellingScene");
       game.scene.start("FireScene");
     });
 
