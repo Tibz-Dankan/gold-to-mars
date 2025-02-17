@@ -8,6 +8,9 @@ export class Game extends Scene {
   private lastUpdateTime: number = 0;
   private earth!: Phaser.GameObjects.Image;
   private mars!: Phaser.GameObjects.Image;
+  private direction = { x: 0, y: 0 }; // Stores the latest direction
+  private speedLimit: number = 20000 / 3.6; // Convert 20,000 km/hr to pixels per second
+  private currentSpeed: number = 0; // Stores current speed
 
   constructor() {
     super("Game");
@@ -46,32 +49,52 @@ export class Game extends Scene {
     this.lastY = this.rocket.y;
     this.lastUpdateTime = performance.now();
 
+    // Listen for direction change from virtual joystick
     this.game.events.on("padMove", this.handlePadMove, this);
+
+    // Listen for acceleration control
     EventBus.on(
       "acceleration",
       ({ acceleration }: { acceleration: number }) => {
-        console.log("acceleration:", acceleration);
+        this.handleAcceleration(acceleration);
       }
     );
   }
 
+  /**
+   * Updates the direction of the rocket based on the joystick movement.
+   * This only controls the **direction** but does not alter the speed.
+   */
   handlePadMove(direction: { x: number; y: number }) {
-    const acceleration = 150; // Increased for better movement
-    this.rocket.setVelocity(
-      direction.x * acceleration,
-      direction.y * acceleration
-    );
+    if (direction.x !== 0 || direction.y !== 0) {
+      this.direction = direction;
+      const angle = Phaser.Math.Angle.Between(0, 0, direction.x, direction.y);
+      this.rocket.setRotation(angle);
+    }
   }
 
-  update() {
+  /**
+   * Updates the speed based on the acceleration input (0-100% of speed limit).
+   */
+  handleAcceleration(acceleration: number) {
+    this.currentSpeed = (acceleration / 100) * this.speedLimit;
+  }
+
+  update(time: number, delta: number) {
     const currentTime = performance.now();
 
     // Run the update logic only if at least 100ms have passed
     if (currentTime - this.lastUpdateTime < 100) return;
 
-    const dt = (currentTime - this.lastUpdateTime) / 1000; // Convert to seconds
+    const dt = delta / 1000; // Convert delta to seconds
 
     if (dt === 0) return; // Avoid division by zero
+
+    // Apply speed and direction
+    this.rocket.setVelocity(
+      this.direction.x * this.currentSpeed,
+      this.direction.y * this.currentSpeed
+    );
 
     // Calculate speed (distance per second)
     const dx = this.rocket.x - this.lastX;
@@ -94,10 +117,9 @@ export class Game extends Scene {
 
     // Determine altitude
     const altitude = Math.min(distanceToEarth, distanceToMars);
-
     const planet = distanceToEarth === altitude ? "Earth" : "Mars";
 
-    //  Emit real-time data
+    // Emit real-time data
     this.game.events.emit("rocketStatus", { speed, altitude, planet });
     EventBus.emit("rocketStatus", { speed, altitude, planet });
 
