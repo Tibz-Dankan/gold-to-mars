@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import { EventBus } from "../EventBus";
 
 export class ControlPadScene extends Scene {
   private pad!: Phaser.GameObjects.Graphics;
@@ -70,6 +71,7 @@ export class ControlPadScene extends Scene {
     // Emit movement event to control the rocket
 
     this.game.events.emit("padMove", { x: normalizedX, y: normalizedY });
+    EventBus.emit("padMove", { x: normalizedX, y: normalizedY });
   }
 
   private stopDrag() {

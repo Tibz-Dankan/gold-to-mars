@@ -25,7 +25,7 @@ export function PhaserGame() {
         FireScene,
         ControlPadScene,
         RocketStatusDisplayScene,
-        TravellingScene,
+        // TravellingScene,
       ],
       physics: {
         default: "arcade",
@@ -41,7 +41,7 @@ export function PhaserGame() {
     game.events.once("ready", () => {
       game.scene.start("ControlPadScene");
       game.scene.start("RocketStatusDisplayScene");
-      game.scene.start("TravellingScene");
+      // game.scene.start("TravellingScene");
       game.scene.start("FireScene");
     });
 
