@@ -80,7 +80,7 @@ export class Game extends Scene {
     this.currentSpeed = (acceleration / 100) * this.speedLimit;
   }
 
-  update(time: number, delta: number) {
+  update(_: number, delta: number) {
     const currentTime = performance.now();
 
     // Run the update logic only if at least 100ms have passed
