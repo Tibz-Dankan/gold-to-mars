@@ -3,29 +3,29 @@ import { EventBus } from "../../game/EventBus";
 import { addCommasToNumber } from "../../utils/addCommaToNumber";
 
 export const RocketCampus: React.FC = () => {
-  const [distanceToMars, setDistanceToMars] = useState(0);
-  const [rocketPosition, setRocketPosition] = useState({ x: 0, y: 0 });
-  const [rocketPath, setRocketPath] = useState<Array<{ x: number; y: number }>>(
-    []
-  );
+  const [acceleration, setAcceleration] = useState(0);
+  const [direction, setDirection] = useState({ x: 0, y: 0 });
+
+  const rocketPosition = useRef({ x: 0, y: 0 });
+  const rocketPath = useRef<Array<{ x: number; y: number }>>([]);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const minDistance = 700;
-    const maxDistance = 1200;
-    const randomDistance = Math.floor(
-      Math.random() * (maxDistance - minDistance + 1) + minDistance
-    );
-    setDistanceToMars(randomDistance);
+    const handlePadMove = (dir: { x: number; y: number }) => {
+      setDirection(dir);
+    };
 
-    const handlePadMove = (direction: { x: number; y: number }) => {
-      setRocketPosition(direction);
+    const handleAcceleration = ({ acceleration }: { acceleration: number }) => {
+      setAcceleration(acceleration);
     };
 
     EventBus.on("padMove", handlePadMove);
+    EventBus.on("acceleration", handleAcceleration);
 
     return () => {
       EventBus.off("padMove", handlePadMove);
+      EventBus.off("acceleration", handleAcceleration);
     };
   }, []);
 
@@ -42,6 +42,7 @@ export const RocketCampus: React.FC = () => {
     const centerY = height / 2;
 
     let animationFrameId: number;
+    const maxSpeed = 20000; // km/hr
 
     const drawScene = () => {
       ctx.clearRect(0, 0, width, height);
@@ -67,8 +68,6 @@ export const RocketCampus: React.FC = () => {
       ctx.beginPath();
       ctx.arc(centerX, centerY, sunRadius, 0, 2 * Math.PI);
       ctx.fillStyle = "#FFD700";
-      //   ctx.fillStyle = "#FFFAF0";
-
       ctx.fill();
 
       // Earth and Orbit
@@ -138,24 +137,34 @@ export const RocketCampus: React.FC = () => {
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Rocket Path - Update and Draw
-      const rocketX = centerX + rocketPosition.x * (width / 4);
-      const rocketY = centerY + rocketPosition.y * (height / 4);
+      // Calculate speed and velocity
+      const speedKmH = (acceleration / 100) * maxSpeed;
+      const pixelsPerFrame = (speedKmH / 3600) * 5;
 
-      setRocketPath((prevPath) => {
-        const newPath = [...prevPath, { x: rocketX, y: rocketY }];
-        const maxLength = 50;
-        if (newPath.length > maxLength) {
-          newPath.shift();
-        }
-        return newPath;
+      // Normalize direction to unit vector
+      const magnitude = Math.sqrt(direction.x ** 2 + direction.y ** 2);
+      const unitDirection =
+        magnitude === 0
+          ? { x: 0, y: 0 }
+          : { x: direction.x / magnitude, y: direction.y / magnitude };
+
+      // Update rocket position (no re-render)
+      rocketPosition.current.x += unitDirection.x * pixelsPerFrame;
+      rocketPosition.current.y += unitDirection.y * pixelsPerFrame;
+
+      // Save rocket path (no re-render)
+      rocketPath.current.push({
+        x: centerX + rocketPosition.current.x,
+        y: centerY + rocketPosition.current.y,
       });
+      if (rocketPath.current.length > 50) rocketPath.current.shift();
 
-      if (rocketPath.length > 0) {
+      // Draw Rocket Path
+      if (rocketPath.current.length > 0) {
         ctx.beginPath();
-        ctx.moveTo(rocketPath[0].x, rocketPath[0].y);
-        for (let i = 1; i < rocketPath.length; i++) {
-          ctx.lineTo(rocketPath[i].x, rocketPath[i].y);
+        ctx.moveTo(rocketPath.current[0].x, rocketPath.current[0].y);
+        for (let i = 1; i < rocketPath.current.length; i++) {
+          ctx.lineTo(rocketPath.current[i].x, rocketPath.current[i].y);
         }
         ctx.strokeStyle = "blue";
         ctx.lineWidth = 2;
@@ -163,20 +172,21 @@ export const RocketCampus: React.FC = () => {
       }
 
       // Rocket Indicator
-      const triangleSize = 10;
+      const rocketX = centerX + rocketPosition.current.x;
+      const rocketY = centerY + rocketPosition.current.y;
+
       ctx.beginPath();
-      ctx.moveTo(rocketX, rocketY - triangleSize / 2);
-      ctx.lineTo(rocketX + triangleSize / 2, rocketY + triangleSize / 2);
-      ctx.lineTo(rocketX - triangleSize / 2, rocketY + triangleSize / 2);
+      ctx.moveTo(rocketX, rocketY - 10 / 2);
+      ctx.lineTo(rocketX + 10 / 2, rocketY + 10 / 2);
+      ctx.lineTo(rocketX - 10 / 2, rocketY + 10 / 2);
       ctx.closePath();
       ctx.fillStyle = "#37b24d";
       ctx.fill();
 
-      // Distance Display (Use current Earth/Mars distance)
+      // Distance Display
       const currentDistance = Math.sqrt(
         Math.pow(marsX - earthX, 2) + Math.pow(marsY - earthY, 2)
       );
-
       ctx.fillStyle = "white";
       ctx.font = "12px Arial";
       ctx.fillText(
@@ -189,11 +199,8 @@ export const RocketCampus: React.FC = () => {
     };
 
     drawScene();
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [rocketPosition]);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [direction, acceleration]);
 
   return (
     <div className="relative w-64 h-64">
