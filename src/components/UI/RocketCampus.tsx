@@ -139,7 +139,9 @@ export const RocketCampus: React.FC = () => {
 
       // Calculate speed and velocity
       const speedKmH = (acceleration / 100) * maxSpeed;
-      const pixelsPerFrame = (speedKmH / 3600) * 5;
+      const pixelsPerFrame = (speedKmH / 3600) * 0.005;
+
+      EventBus.emit("rocketSpeed", { speed: speedKmH });
 
       // Normalize direction to unit vector
       const magnitude = Math.sqrt(direction.x ** 2 + direction.y ** 2);
