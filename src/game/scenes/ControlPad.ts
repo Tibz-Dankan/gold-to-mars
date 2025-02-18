@@ -72,6 +72,16 @@ export class ControlPadScene extends Scene {
 
     this.game.events.emit("padMove", { x: normalizedX, y: normalizedY });
     EventBus.emit("padMove", { x: normalizedX, y: normalizedY });
+
+    // const scaleFactor = 1; // Adjust as needed
+
+    // // Normalize values (-1 to 1 range)
+    // const normalizedX = (dx / this.maxDistance) * scaleFactor;
+    // const normalizedY = -(dy / this.maxDistance) * scaleFactor; // 🔹 Flip Y-axis
+
+    // // Emit movement event to control the rocket
+    // this.game.events.emit("padMove", { x: normalizedX, y: normalizedY });
+    // EventBus.emit("padMove", { x: normalizedX, y: normalizedY });
   }
 
   private stopDrag() {

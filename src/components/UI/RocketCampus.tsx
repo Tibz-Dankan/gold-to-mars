@@ -15,6 +15,7 @@ export const RocketCampus: React.FC = () => {
     const handlePadMove = (dir: { x: number; y: number }) => {
       setDirection(dir);
     };
+    // console.log("direction: ", dir);
 
     const handleAcceleration = ({ acceleration }: { acceleration: number }) => {
       setAcceleration(acceleration);
@@ -185,16 +186,58 @@ export const RocketCampus: React.FC = () => {
       ctx.fillStyle = "#37b24d";
       ctx.fill();
 
+      // const pixelsToKm = 1 / 500; // 1 km = 500 pixels
+      const pixelsToKm = 100; // 1 km = 500 pixels
+
       // Distance Display
-      const currentDistance = Math.sqrt(
-        Math.pow(marsX - earthX, 2) + Math.pow(marsY - earthY, 2)
-      );
+      const currentDistance =
+        Math.sqrt(Math.pow(marsX - earthX, 2) + Math.pow(marsY - earthY, 2)) *
+        pixelsToKm;
       ctx.fillStyle = "white";
       ctx.font = "12px Arial";
       ctx.fillText(
-        `Distance: ${addCommasToNumber(currentDistance * 100)} km`,
+        `Distance: ${addCommasToNumber(
+          parseFloat(currentDistance.toFixed(2))
+        )} km`,
         10,
         20
+      );
+
+      const rocketPositionX = rocketPosition.current.x;
+      const rocketPositionY = -rocketPosition.current.y;
+
+      const earthPositionX = earthX - centerX;
+      const earthPositionY = centerY - earthY; // Invert Y
+
+      const marsPositionX = marsX - centerX;
+      const marsPositionY = centerY - marsY; // Invert Y
+
+      const distanceToEarthKm =
+        Math.sqrt(
+          Math.pow(rocketPositionX - earthPositionX, 2) +
+            Math.pow(rocketPositionY - earthPositionY, 2)
+        ) * pixelsToKm;
+
+      const distanceToMarsKm =
+        Math.sqrt(
+          Math.pow(rocketPositionX - marsPositionX, 2) +
+            Math.pow(rocketPositionY - marsPositionY, 2)
+        ) * pixelsToKm;
+
+      // Display the distances
+      ctx.fillText(
+        `Distance to Earth: ${addCommasToNumber(
+          parseFloat(distanceToEarthKm.toFixed(2))
+        )} km`,
+        10,
+        40
+      );
+      ctx.fillText(
+        `Distance to Mars: ${addCommasToNumber(
+          parseFloat(distanceToMarsKm.toFixed(2))
+        )} km`,
+        10,
+        60
       );
 
       animationFrameId = requestAnimationFrame(drawScene);
