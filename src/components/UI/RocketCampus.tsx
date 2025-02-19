@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { EventBus } from "../../game/EventBus";
-import { addCommasToNumber } from "../../utils/addCommaToNumber";
+// import { addCommasToNumber } from "../../utils/addCommaToNumber";
 import { isApproaching } from "../../utils/isApproaching";
 
 export const RocketCampus: React.FC = () => {
@@ -188,22 +188,8 @@ export const RocketCampus: React.FC = () => {
       ctx.fill();
 
       // const pixelsToKm = 1 / 500; // 1 km = 500 pixels
-      const pixelsToKm = 100; // 1 km = 500 pixels
+      // const pixelsToKm = 100; // 1 km = 500 pixels
       const rocketPlanetScaler = 10;
-
-      // Distance Display
-      const currentDistance =
-        Math.sqrt(Math.pow(marsX - earthX, 2) + Math.pow(marsY - earthY, 2)) *
-        pixelsToKm;
-      ctx.fillStyle = "white";
-      ctx.font = "12px Arial";
-      ctx.fillText(
-        `Distance: ${addCommasToNumber(
-          parseFloat(currentDistance.toFixed(2))
-        )} km`,
-        10,
-        20
-      );
 
       const rocketPositionX = rocketPosition.current.x;
       const rocketPositionY = -rocketPosition.current.y;
@@ -226,21 +212,34 @@ export const RocketCampus: React.FC = () => {
             Math.pow(rocketPositionY - marsPositionY, 2)
         ) * rocketPlanetScaler;
 
-      // Display the distances
-      ctx.fillText(
-        `Distance to Earth: ${addCommasToNumber(
-          parseFloat(distanceToEarthKm.toFixed(2))
-        )} km`,
-        10,
-        40
-      );
-      ctx.fillText(
-        `Distance to Mars: ${addCommasToNumber(
-          parseFloat(distanceToMarsKm.toFixed(2))
-        )} km`,
-        10,
-        60
-      );
+      // // Distance Display
+      // const currentDistance =
+      //   Math.sqrt(Math.pow(marsX - earthX, 2) + Math.pow(marsY - earthY, 2)) *
+      //   pixelsToKm;
+      // ctx.fillStyle = "white";
+      // ctx.font = "12px Arial";
+      // ctx.fillText(
+      //   `Distance: ${addCommasToNumber(
+      //     parseFloat(currentDistance.toFixed(2))
+      //   )} km`,
+      //   10,
+      //   20
+      // );
+      // // Display the distances
+      // ctx.fillText(
+      //   `Distance to Earth: ${addCommasToNumber(
+      //     parseFloat(distanceToEarthKm.toFixed(2))
+      //   )} km`,
+      //   10,
+      //   40
+      // );
+      // ctx.fillText(
+      //   `Distance to Mars: ${addCommasToNumber(
+      //     parseFloat(distanceToMarsKm.toFixed(2))
+      //   )} km`,
+      //   10,
+      //   60
+      // );
 
       const approachingEarth = isApproaching(
         prevDistances.current.earth,
@@ -296,8 +295,11 @@ export const RocketCampus: React.FC = () => {
   }, [direction, acceleration]);
 
   return (
-    <div className="relative w-64 h-64">
-      <canvas ref={canvasRef} width={256} height={256} />
+    <div
+      className="w-72 h-72 p-4 rounded-full bg-slate-800 
+      absolute -left-8 -top-72 flex items-center justify-center"
+    >
+      <canvas ref={canvasRef} width={268} height={268} />
     </div>
   );
 };
