@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { EventBus } from "../../game/EventBus";
 import { addCommasToNumber } from "../../utils/addCommaToNumber";
+import { isApproaching } from "../../utils/isApproaching";
 
 export const RocketCampus: React.FC = () => {
   const [acceleration, setAcceleration] = useState(0);
   const [direction, setDirection] = useState({ x: 0, y: 0 });
+  const prevDistances = useRef({ earth: Infinity, mars: Infinity });
 
   const rocketPosition = useRef({ x: 0, y: 0 });
   const rocketPath = useRef<Array<{ x: number; y: number }>>([]);
@@ -15,7 +17,6 @@ export const RocketCampus: React.FC = () => {
     const handlePadMove = (dir: { x: number; y: number }) => {
       setDirection(dir);
     };
-    // console.log("direction: ", dir);
 
     const handleAcceleration = ({ acceleration }: { acceleration: number }) => {
       setAcceleration(acceleration);
@@ -188,6 +189,7 @@ export const RocketCampus: React.FC = () => {
 
       // const pixelsToKm = 1 / 500; // 1 km = 500 pixels
       const pixelsToKm = 100; // 1 km = 500 pixels
+      const rocketPlanetScaler = 10;
 
       // Distance Display
       const currentDistance =
@@ -216,13 +218,13 @@ export const RocketCampus: React.FC = () => {
         Math.sqrt(
           Math.pow(rocketPositionX - earthPositionX, 2) +
             Math.pow(rocketPositionY - earthPositionY, 2)
-        ) * pixelsToKm;
+        ) * rocketPlanetScaler;
 
       const distanceToMarsKm =
         Math.sqrt(
           Math.pow(rocketPositionX - marsPositionX, 2) +
             Math.pow(rocketPositionY - marsPositionY, 2)
-        ) * pixelsToKm;
+        ) * rocketPlanetScaler;
 
       // Display the distances
       ctx.fillText(
@@ -239,6 +241,52 @@ export const RocketCampus: React.FC = () => {
         10,
         60
       );
+
+      const approachingEarth = isApproaching(
+        prevDistances.current.earth,
+        distanceToEarthKm
+      );
+      const approachingMars = isApproaching(
+        prevDistances.current.mars,
+        distanceToMarsKm
+      );
+
+      const isEarthAtmosphere: boolean = distanceToEarthKm <= 250;
+      const isMarsAtmosphere: boolean = distanceToMarsKm <= 180;
+      // const isSpace: boolean = !isEarthAtmosphere && !isMarsAtmosphere;
+
+      if (isEarthAtmosphere) {
+        EventBus.emit("rocketLocation", {
+          location: "Earth",
+          isApproachingEarth: approachingEarth,
+          isApproachingMars: approachingMars,
+          distanceToEarthKm: distanceToEarthKm,
+          distanceToMarsKm: distanceToMarsKm,
+        });
+      } else if (isMarsAtmosphere) {
+        EventBus.emit("rocketLocation", {
+          location: "Mars",
+          isApproachingEarth: approachingEarth,
+          isApproachingMars: approachingMars,
+          distanceToEarthKm: distanceToEarthKm,
+          distanceToMarsKm: distanceToMarsKm,
+        });
+      } else {
+        EventBus.emit("rocketLocation", {
+          location: "Space",
+          isApproachingEarth: approachingEarth,
+          isApproachingMars: approachingMars,
+          distanceToEarthKm: distanceToEarthKm,
+          distanceToMarsKm: distanceToMarsKm,
+        });
+      }
+
+      // console.log("Approaching Earth:", approachingEarth);
+      // console.log("Approaching Mars:", approachingMars);
+
+      // Update previous distances
+      prevDistances.current.earth = distanceToEarthKm;
+      prevDistances.current.mars = distanceToMarsKm;
 
       animationFrameId = requestAnimationFrame(drawScene);
     };
