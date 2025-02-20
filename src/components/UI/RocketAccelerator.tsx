@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { EventBus } from "../../game/EventBus";
 
 export const RocketAccelerator: React.FC = () => {
@@ -25,6 +25,38 @@ export const RocketAccelerator: React.FC = () => {
     setPosition(() => newPosition);
   };
 
+  useEffect(() => {
+    const handleTakeOff = ({ takeOff }: { takeOff: boolean }) => {
+      if (takeOff) {
+        let start = position;
+        let end = 100;
+        let duration = 500;
+        // let duration = 3000;
+        let startTime = performance.now();
+
+        const animate = (currentTime: number) => {
+          let elapsed = currentTime - startTime;
+          let progress = Math.min(elapsed / duration, 1); // Ensure it doesn't exceed 100%
+
+          let newPosition = start + (end - start) * progress;
+          setPosition(newPosition);
+          EventBus.emit("acceleration", { acceleration: newPosition });
+
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          }
+        };
+
+        requestAnimationFrame(animate);
+      }
+    };
+
+    EventBus.on("takeOff", handleTakeOff);
+    return () => {
+      EventBus.off("takeOff", handleTakeOff);
+    };
+  }, [position]);
+
   return (
     <div className="w-full flex justify-center py-10 bg-slate-700 rounded-lg px-8">
       <div
@@ -35,20 +67,17 @@ export const RocketAccelerator: React.FC = () => {
         onMouseMove={(e) => e.buttons === 1 && handleDrag(e)}
         onTouchMove={(e) => handleDrag(e)}
       >
-        {/*Accelerator label */}
+        {/* Accelerator label */}
         <label className="absolute -top-8 left-0 text-gray-300 text-[12px] font-light">
           Accelerator
         </label>
         {/* Accelerator knob */}
         <div
-          className="absolute w-6 h-5 bg-blue-500 rounded-sm top-1/2 -translate-y-1/2 cursor-pointer"
+          className="absolute w-6 h-5 bg-blue-500 rounded-sm top-1/2 -translate-y-1/2 cursor-pointer transition-all duration-500"
           style={{ left: `${position}%`, transform: "translate(-50%, -50%)" }}
         />
         {/* Accelerator Stats */}
-        <div
-          className="absolute -bottom-6 left-0 text-gray-300 text-[12px]
-          flex items-center justify-between gap-2 w-full"
-        >
+        <div className="absolute -bottom-6 left-0 text-gray-300 text-[12px] flex items-center justify-between gap-2 w-full">
           <span className="text-[12px] text-gray-300">MIN</span>
           <span className="text-[12px] text-gray-300">
             {position.toFixed(2)}%
