@@ -2,11 +2,12 @@ import { useLayoutEffect } from "react";
 import Phaser from "phaser";
 import { Preloader } from "./scenes/Preloader";
 import { Game } from "./scenes/Game";
-import { FireScene } from "./scenes/Fire";
+// import { FireScene } from "./scenes/Fire";
 import { ControlPadScene } from "./scenes/ControlPad";
-import { RocketStatusDisplayScene } from "./scenes/RocketStatusDisplay";
+// import { RocketStatusDisplayScene } from "./scenes/RocketStatusDisplay";
 import { ControlLayout } from "../components/layout/ControlLayout";
-import { TravellingScene } from "./scenes/Travelling";
+// import { TravellingScene } from "./scenes/Travelling";
+import { TakeOffScene } from "./scenes/TakeOff";
 
 export function PhaserGame() {
   useLayoutEffect(() => {
@@ -22,16 +23,18 @@ export function PhaserGame() {
       scene: [
         Preloader,
         Game,
-        FireScene,
+        // FireScene,
         ControlPadScene,
-        RocketStatusDisplayScene,
+        // RocketStatusDisplayScene,
         // TravellingScene,
+        TakeOffScene,
       ],
       physics: {
         default: "arcade",
         arcade: {
           gravity: { y: 0 },
           debug: true,
+          // debug: false,
         },
       },
     };
@@ -40,9 +43,10 @@ export function PhaserGame() {
 
     game.events.once("ready", () => {
       game.scene.start("ControlPadScene");
-      game.scene.start("RocketStatusDisplayScene");
+      // game.scene.start("RocketStatusDisplayScene");
       // game.scene.start("TravellingScene");
-      game.scene.start("FireScene");
+      // game.scene.start("FireScene");
+      // game.scene.start("TakeOffScene");
     });
 
     // Handle resizing without zoom animation
@@ -63,7 +67,7 @@ export function PhaserGame() {
   return (
     <div id="game-container" className="relative overflow-hidden">
       <div className="absolute top-2 left-2">Game controls here</div>
-      <div className="w-fulls absolute bottom-4 left-4">
+      <div className="w-fulls absolute bottom-4 left-4s right-52">
         <ControlLayout />
       </div>
     </div>

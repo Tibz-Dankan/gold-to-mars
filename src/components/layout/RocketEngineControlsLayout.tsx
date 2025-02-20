@@ -32,6 +32,8 @@ export const RocketEngineControlsLayout: React.FC = () => {
     console.log("checked takeOff engine: ", checked);
     EventBus.emit("engineStatus", { engineStatus: "TAKE_OFF" });
     setEngineStatus(() => "TAKE_OFF");
+    if (!checked) return;
+    EventBus.emit("takeOff", { takeOff: true });
   };
 
   const onLandingEngineHandler = (checked: boolean) => {
