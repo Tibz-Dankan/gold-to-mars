@@ -23,6 +23,12 @@ export class ControlPadScene extends Scene {
   }
 
   create() {
+    // Make this scene persist and always be on top
+    this.scene.setVisible(true);
+    this.scene.bringToTop();
+    this.scene.setActive(true);
+    this.scene.setVisible(true);
+
     const { width, height } = this.scale.gameSize;
     const padX = width - 100;
     const padY = height - 100;
@@ -35,7 +41,7 @@ export class ControlPadScene extends Scene {
 
     // Create the draggable ball (light green)
     this.ball = this.add.image(padX, padY, "ballTexture").setInteractive();
-    this.ball.setDepth(1);
+    this.ball.setDepth(1000); // Ensures it's on top
 
     // Enable dragging
     this.input.setDraggable(this.ball);
@@ -47,6 +53,9 @@ export class ControlPadScene extends Scene {
     this.input.on("dragend", () => {
       this.stopDrag();
     });
+
+    // Always bring the control pad to the top
+    this.scene.bringToTop();
   }
 
   private onDrag(x: number, y: number) {
@@ -62,30 +71,25 @@ export class ControlPadScene extends Scene {
 
     this.ball.setPosition(this.padCenter.x + dx, this.padCenter.y + dy);
 
-    const scaleFactor = 1; // Adjust this as needed
+    const scaleFactor = 1; // Adjust as needed
 
     // Normalize values (-1 to 1 range)
     const normalizedX = (dx / this.maxDistance) * scaleFactor;
     const normalizedY = (dy / this.maxDistance) * scaleFactor;
 
     // Emit movement event to control the rocket
-
     this.game.events.emit("padMove", { x: normalizedX, y: normalizedY });
     EventBus.emit("padMove", { x: normalizedX, y: normalizedY });
 
-    // const scaleFactor = 1; // Adjust as needed
-
-    // // Normalize values (-1 to 1 range)
-    // const normalizedX = (dx / this.maxDistance) * scaleFactor;
-    // const normalizedY = -(dy / this.maxDistance) * scaleFactor; // 🔹 Flip Y-axis
-
-    // // Emit movement event to control the rocket
-    // this.game.events.emit("padMove", { x: normalizedX, y: normalizedY });
-    // EventBus.emit("padMove", { x: normalizedX, y: normalizedY });
+    // Keep the pad scene always on top
+    this.scene.bringToTop();
   }
 
   private stopDrag() {
     this.ball.setPosition(this.padCenter.x, this.padCenter.y);
     this.game.events.emit("padMove", { x: 0, y: 0 });
+
+    // Keep the pad scene on top
+    this.scene.bringToTop();
   }
 }
