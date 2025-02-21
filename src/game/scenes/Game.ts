@@ -134,16 +134,61 @@
 // }
 
 import { Scene } from "phaser";
-// import { EventBus } from "../EventBus";
+import { EventBus } from "../EventBus";
+
 export class Game extends Scene {
+  private currentScene: string;
+
   constructor() {
     super("Game");
+    this.currentScene = "";
   }
 
   create() {
-    // const { width, height } = this.scale.gameSize;
+    // Ensure the control pad scene is always active
+    this.scene.launch("ControlPadScene");
+    this.scene.bringToTop("ControlPadScene");
 
-    // TODO: To become the scene controller based on rocket location and other events/actions
-    this.scene.start("TakeOffScene");
+    // Listen for location updates and switch scenes accordingly
+    EventBus.on("rocketLocation", this.handleRocketLocation, this);
+  }
+
+  private handleRocketLocation(rocketLocation: {
+    location: string;
+    isApproachingEarth: boolean;
+    isApproachingMars: boolean;
+    distanceToEarthKm: number;
+    distanceToMarsKm: number;
+  }) {
+    if (this.currentScene === rocketLocation.location) return; // Avoid redundant switches
+
+    this.currentScene = rocketLocation.location; // Update the current scene
+
+    // Stop the previous scene (except for ControlPadScene)
+    this.stopCurrentGameScene();
+
+    // Switch to the new scene
+    switch (rocketLocation.location) {
+      case "Earth":
+        this.scene.start("TakeOffScene");
+        break;
+      case "Mars":
+        this.scene.start("MarsScene"); // 🚀 Dropping gold on Mars
+        break;
+      case "Space":
+        this.scene.start("SpaceScene");
+        break;
+    }
+
+    console.log(`Switched to ${this.currentScene}`);
+  }
+
+  private stopCurrentGameScene() {
+    const activeScenes = ["TakeOffScene", "MarsScene", "SpaceScene"];
+    activeScenes.forEach((scene) => {
+      if (this.scene?.isActive(scene)) {
+        this.scene?.stop(scene);
+      }
+    });
   }
 }

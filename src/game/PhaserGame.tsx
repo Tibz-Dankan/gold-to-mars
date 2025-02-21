@@ -8,6 +8,7 @@ import { ControlPadScene } from "./scenes/ControlPad";
 import { ControlLayout } from "../components/layout/ControlLayout";
 // import { TravellingScene } from "./scenes/Travelling";
 import { TakeOffScene } from "./scenes/TakeOff";
+import { SpaceScene } from "./scenes/Space";
 
 export function PhaserGame() {
   useLayoutEffect(() => {
@@ -28,6 +29,7 @@ export function PhaserGame() {
         // RocketStatusDisplayScene,
         // TravellingScene,
         TakeOffScene,
+        SpaceScene,
       ],
       physics: {
         default: "arcade",
