@@ -9,6 +9,7 @@ import { ControlLayout } from "../components/layout/ControlLayout";
 // import { TravellingScene } from "./scenes/Travelling";
 import { TakeOffScene } from "./scenes/TakeOff";
 import { SpaceScene } from "./scenes/Space";
+import { DropGoldScene } from "./scenes/DropGold";
 
 export function PhaserGame() {
   useLayoutEffect(() => {
@@ -30,6 +31,7 @@ export function PhaserGame() {
         // TravellingScene,
         TakeOffScene,
         SpaceScene,
+        DropGoldScene,
       ],
       physics: {
         default: "arcade",
@@ -69,7 +71,7 @@ export function PhaserGame() {
   return (
     <div id="game-container" className="relative overflow-hidden">
       <div className="absolute top-2 left-2">Game controls here</div>
-      <div className="w-fulls absolute bottom-4 left-4s right-52">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
         <ControlLayout />
       </div>
     </div>

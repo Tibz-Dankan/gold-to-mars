@@ -188,7 +188,7 @@ export const RocketCampus: React.FC = () => {
       ctx.fill();
 
       // const pixelsToKm = 1 / 500; // 1 km = 500 pixels
-      // const pixelsToKm = 100; // 1 km = 500 pixels
+      const planetToPlanetScaler = 100; // 1 km = 500 pixels
       const rocketPlanetScaler = 10;
 
       const rocketPositionX = rocketPosition.current.x;
@@ -211,6 +211,12 @@ export const RocketCampus: React.FC = () => {
           Math.pow(rocketPositionX - marsPositionX, 2) +
             Math.pow(rocketPositionY - marsPositionY, 2)
         ) * rocketPlanetScaler;
+
+      const distanceFromEarthToMarsKm =
+        Math.sqrt(
+          Math.pow(earthPositionX - marsPositionX, 2) +
+            Math.pow(earthPositionY - marsPositionY, 2)
+        ) * planetToPlanetScaler;
 
       // // Distance Display
       // const currentDistance =
@@ -261,6 +267,7 @@ export const RocketCampus: React.FC = () => {
           isApproachingMars: approachingMars,
           distanceToEarthKm: distanceToEarthKm,
           distanceToMarsKm: distanceToMarsKm,
+          distanceFromEarthToMarsKm: distanceFromEarthToMarsKm,
         });
       } else if (isMarsAtmosphere) {
         EventBus.emit("rocketLocation", {
@@ -269,6 +276,7 @@ export const RocketCampus: React.FC = () => {
           isApproachingMars: approachingMars,
           distanceToEarthKm: distanceToEarthKm,
           distanceToMarsKm: distanceToMarsKm,
+          distanceFromEarthToMarsKm: distanceFromEarthToMarsKm,
         });
       } else {
         EventBus.emit("rocketLocation", {
@@ -277,6 +285,7 @@ export const RocketCampus: React.FC = () => {
           isApproachingMars: approachingMars,
           distanceToEarthKm: distanceToEarthKm,
           distanceToMarsKm: distanceToMarsKm,
+          distanceFromEarthToMarsKm: distanceFromEarthToMarsKm,
         });
       }
 

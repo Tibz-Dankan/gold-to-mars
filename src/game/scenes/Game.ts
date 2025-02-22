@@ -167,18 +167,19 @@ export class Game extends Scene {
     // Stop the previous scene (except for ControlPadScene)
     this.stopCurrentGameScene();
 
-    // Switch to the new scene
-    switch (rocketLocation.location) {
-      case "Earth":
-        this.scene.start("TakeOffScene");
-        break;
-      case "Mars":
-        this.scene.start("MarsScene"); // 🚀 Dropping gold on Mars
-        break;
-      case "Space":
-        this.scene.start("SpaceScene");
-        break;
-    }
+    // // Switch to the new scene  //Default scene controller
+    // switch (rocketLocation.location) {
+    //   case "Earth":
+    //     this.scene.start("TakeOffScene");
+    //     break;
+    //   case "Mars":
+    //     this.scene.start("MarsScene"); // 🚀 Dropping gold on Mars
+    //     break;
+    //   case "Space":
+    //     this.scene.start("SpaceScene");
+    //     break;
+    // }
+    this.scene.start("DropGoldScene");
 
     console.log(`Switched to ${this.currentScene}`);
   }
