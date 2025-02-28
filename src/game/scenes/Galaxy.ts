@@ -9,6 +9,7 @@ export class GalaxyScene extends Scene {
   private particleEmitter!: Phaser.GameObjects.Particles.ParticleEmitter;
   private worldCenterX: number = 0;
   private worldCenterY: number = 0;
+  private scaleFactor: number = 7.5;
   private galaxyWidthScaler: number = 0;
   private earthPositionX: number = 0;
   private earthPositionY: number = 0;
@@ -25,8 +26,9 @@ export class GalaxyScene extends Scene {
     // Scale the game world to 5 times the screen size
     const { width } = this.scale.gameSize;
 
-    const worldWidth = this.scale.gameSize.width * 5;
-    const worldHeight = this.scale.gameSize.height * 5;
+    const worldWidth = this.scale.gameSize.width * this.scaleFactor;
+    const worldHeight = this.scale.gameSize.height * this.scaleFactor;
+    // galaxyScaleFactor
 
     this.worldCenterX = worldWidth / 2;
     this.worldCenterY = worldHeight / 2;
@@ -47,8 +49,7 @@ export class GalaxyScene extends Scene {
     this.rocket.body!.debugShowBody = false;
 
     // Set camera follow on the rocket
-    this.cameras.main.startFollow(this.rocket, true, 0.05, 0.05);
-    // this.cameras.main.startFollow(this.rocket, false, 1, 1);
+    this.cameras.main.startFollow(this.rocket, false, 1, 1);
 
     this.mars = this.add
       .image(this.marsPositionX, this.marsPositionY, "mars")
@@ -115,17 +116,23 @@ export class GalaxyScene extends Scene {
 
   handlePlanetPosition(position: TPlanet["planetPosition"]) {
     this.earthPositionX =
-      this.worldCenterX + position.earthPositionX * this.galaxyWidthScaler * 5;
+      this.worldCenterX +
+      position.earthPositionX * this.galaxyWidthScaler * this.scaleFactor;
     this.earthPositionY =
-      this.worldCenterY + position.earthPositionY * this.galaxyWidthScaler * 5;
+      this.worldCenterY +
+      position.earthPositionY * this.galaxyWidthScaler * this.scaleFactor;
     this.marsPositionX =
-      this.worldCenterX + position.marsPositionX * this.galaxyWidthScaler * 5;
+      this.worldCenterX +
+      position.marsPositionX * this.galaxyWidthScaler * this.scaleFactor;
     this.marsPositionY =
-      this.worldCenterY + position.marsPositionY * this.galaxyWidthScaler * 5;
+      this.worldCenterY +
+      position.marsPositionY * this.galaxyWidthScaler * this.scaleFactor;
     this.rocketPositionX =
-      this.worldCenterX + position.rocketPositionX * this.galaxyWidthScaler * 5;
+      this.worldCenterX +
+      position.rocketPositionX * this.galaxyWidthScaler * this.scaleFactor;
     this.rocketPositionY =
-      this.worldCenterY + position.rocketPositionY * this.galaxyWidthScaler * 5;
+      this.worldCenterY +
+      position.rocketPositionY * this.galaxyWidthScaler * this.scaleFactor;
 
     // Update the actual positions of the rocket images
     if (this.rocket) {
