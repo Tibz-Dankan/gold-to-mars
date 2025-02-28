@@ -25,12 +25,11 @@ export const RocketStatusDisplay = () => {
   }, []);
 
   return (
-    <div className="text-gray-100 flex flex-col justify-center gap-4">
+    <div className="text-gray-100 flex justify-center gap-4 pt-1">
       <RocketSpeedometer speed={rocketSpeed.speed} maxSpeed={20000} />
       <RocketSpeedAltitudeTable
         altitude={rocketStatus.altitude}
         speed={rocketSpeed.speed}
-        planet={rocketStatus.planet}
       />
     </div>
   );
