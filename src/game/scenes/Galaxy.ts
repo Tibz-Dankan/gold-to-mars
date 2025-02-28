@@ -47,8 +47,7 @@ export class GalaxyScene extends Scene {
     this.rocket.body!.debugShowBody = false;
 
     // Set camera follow on the rocket
-    this.cameras.main.startFollow(this.rocket, true, 0.05, 0.05);
-    // this.cameras.main.startFollow(this.rocket, false, 1, 1);
+    this.cameras.main.startFollow(this.rocket, false, 1, 1);
 
     this.mars = this.add
       .image(this.marsPositionX, this.marsPositionY, "mars")
