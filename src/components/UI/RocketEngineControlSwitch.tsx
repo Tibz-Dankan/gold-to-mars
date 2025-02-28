@@ -24,7 +24,7 @@ export const RocketEngineControlSwitch: React.FC<
   return (
     <div
       className="w-full px-2 py-1 pb-2 flex items-center justify-between
-      gap-4 rounded-lg bg-slate-700"
+      gap-4 rounded-lgs bg-slate-700/60 "
     >
       <span className="text-gray-300 text-[12px] font-[400]">
         {props.label}

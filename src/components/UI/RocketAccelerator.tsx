@@ -58,10 +58,10 @@ export const RocketAccelerator: React.FC = () => {
   }, [position]);
 
   return (
-    <div className="w-full flex justify-center py-10 bg-slate-700 rounded-lg px-8">
+    <div className="w-full flex justify-center py-8 bg-slate-700/60 rounded-lgs rounded-sms px-4">
       <div
         ref={trackRef}
-        className="relative w-40 h-4 bg-gray-400"
+        className="relative w-40s w-36 h-4 bg-gray-400"
         onMouseDown={(e) => handleDrag(e)}
         onTouchStart={(e) => handleDrag(e)}
         onMouseMove={(e) => e.buttons === 1 && handleDrag(e)}
@@ -77,12 +77,12 @@ export const RocketAccelerator: React.FC = () => {
           style={{ left: `${position}%`, transform: "translate(-50%, -50%)" }}
         />
         {/* Accelerator Stats */}
-        <div className="absolute -bottom-6 left-0 text-gray-300 text-[12px] flex items-center justify-between gap-2 w-full">
-          <span className="text-[12px] text-gray-300">MIN</span>
-          <span className="text-[12px] text-gray-300">
+        <div className="absolute -bottom-6 left-0 text-gray-300 text-[10px] flex items-center justify-between gap-2 w-full">
+          <span className="text-[12px]s text-gray-300">MIN</span>
+          <span className="text-[12px]s text-gray-300">
             {position.toFixed(2)}%
           </span>
-          <span className="text-[12px] text-gray-300">MAX</span>
+          <span className="text-[12px]s text-gray-300">MAX</span>
         </div>
       </div>
     </div>

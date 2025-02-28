@@ -3,6 +3,7 @@ import { RocketEngineControlSwitch } from "../UI/RocketEngineControlSwitch";
 import { EventBus } from "../../game/EventBus";
 import {} from "react";
 import { TRocket } from "../../types/rocketStatus";
+import { RocketAccelerator } from "../UI/RocketAccelerator";
 
 export const RocketEngineControlsLayout: React.FC = () => {
   const [engineStatus, setEngineStatus] =
@@ -46,6 +47,7 @@ export const RocketEngineControlsLayout: React.FC = () => {
 
   return (
     <div className=" rounded-lg flex flex-col gap-1 items-center justify-center">
+      <RocketAccelerator />
       <RocketEngineControlSwitch
         label="Shutdown Engine"
         onCheckHandler={onShutdownEngineHandler}

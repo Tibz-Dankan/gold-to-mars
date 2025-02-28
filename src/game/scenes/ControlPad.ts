@@ -16,7 +16,7 @@ export class ControlPadScene extends Scene {
   preload() {
     // Create a graphics object to draw the ball
     const ballGraphics = this.add.graphics();
-    ballGraphics.fillStyle(0x90ee90, 1);
+    ballGraphics.fillStyle(0x90a1b9, 1);
     ballGraphics.fillCircle(15, 15, 15);
     ballGraphics.generateTexture("ballTexture", 30, 30);
     ballGraphics.destroy();
@@ -36,7 +36,8 @@ export class ControlPadScene extends Scene {
 
     // Create the joystick pad (dark green)
     this.pad = this.add.graphics();
-    this.pad.fillStyle(0x006400, 1);
+    // this.pad.fillStyle(0x006400, 1);
+    this.pad.fillStyle(0x314158, 0.6);
     this.pad.fillCircle(padX, padY, 50);
 
     // Create the draggable ball (light green)

@@ -80,7 +80,7 @@ export function PhaserGame() {
       <div className="absolute bottom-2 left-2">
         <RocketLocation />
       </div>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+      <div className="absolute bottom-4 left-1/2s right-48 -translate-x-1/2s">
         <ControlLayout />
       </div>
     </div>
