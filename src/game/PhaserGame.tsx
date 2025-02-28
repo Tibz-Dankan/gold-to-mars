@@ -12,6 +12,7 @@ import { SpaceScene } from "./scenes/Space";
 import { DropGoldScene } from "./scenes/DropGold";
 import { GalaxyScene } from "./scenes/Galaxy";
 import { RocketStatusDisplay } from "../components/UI/RocketStatusDisplay";
+import { RocketLocation } from "../components/UI/RocketLocation";
 
 export function PhaserGame() {
   useLayoutEffect(() => {
@@ -75,6 +76,9 @@ export function PhaserGame() {
     <div id="game-container" className="relative overflow-hidden">
       <div className="absolute top-2 left-2">
         <RocketStatusDisplay />
+      </div>
+      <div className="absolute bottom-2 left-2">
+        <RocketLocation />
       </div>
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
         <ControlLayout />
