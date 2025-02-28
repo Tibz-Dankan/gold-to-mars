@@ -200,6 +200,23 @@ export const RocketCampus: React.FC = () => {
       const marsPositionX = marsX - centerX;
       const marsPositionY = centerY - marsY; // Invert Y
 
+      // EventBus.emit("planetPosition", {
+      //   earthPositionX: earthPositionX,
+      //   earthPositionY: earthPositionY,
+      //   marsPositionX: marsPositionX,
+      //   marsPositionY: marsPositionY,
+      //   rocketPositionX: rocketPosition.current.x,
+      //   rocketPositionY: rocketPosition.current.y,
+      // });
+      EventBus.emit("planetPosition", {
+        earthPositionX: earthX - centerX,
+        earthPositionY: earthY - centerY,
+        marsPositionX: marsX - centerX,
+        marsPositionY: marsY - centerY,
+        rocketPositionX: rocketPosition.current.x,
+        rocketPositionY: rocketPosition.current.y,
+      });
+
       const distanceToEarthKm =
         Math.sqrt(
           Math.pow(rocketPositionX - earthPositionX, 2) +

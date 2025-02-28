@@ -179,7 +179,8 @@ export class Game extends Scene {
     //     this.scene.start("SpaceScene");
     //     break;
     // }
-    this.scene.start("DropGoldScene");
+    // this.scene.start("DropGoldScene");
+    this.scene.start("GalaxyScene");
 
     console.log(`Switched to ${this.currentScene}`);
   }

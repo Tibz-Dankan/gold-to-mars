@@ -10,6 +10,7 @@ import { ControlLayout } from "../components/layout/ControlLayout";
 import { TakeOffScene } from "./scenes/TakeOff";
 import { SpaceScene } from "./scenes/Space";
 import { DropGoldScene } from "./scenes/DropGold";
+import { GalaxyScene } from "./scenes/Galaxy";
 
 export function PhaserGame() {
   useLayoutEffect(() => {
@@ -32,6 +33,7 @@ export function PhaserGame() {
         TakeOffScene,
         SpaceScene,
         DropGoldScene,
+        GalaxyScene,
       ],
       physics: {
         default: "arcade",
