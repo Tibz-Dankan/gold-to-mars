@@ -1,8 +1,8 @@
 type RocketStatus = {
-  speed: number;
-  altitude: number;
-  planet: "Earth" | "Mars";
-  engineStatus: "IGNITE" | "TAKE_OFF" | "SHUTDOWN" | "LANDING" | "CRUISING";
+  isLoadGold: boolean;
+  isTakeOff: boolean;
+  isDropGold: boolean;
+  isLanding: boolean;
 };
 
 export type TRocket = {

@@ -6,8 +6,12 @@ import { TRocket } from "../../types/rocketStatus";
 import { RocketAccelerator } from "../UI/RocketAccelerator";
 
 export const RocketEngineControlsLayout: React.FC = () => {
-  const [engineStatus, setEngineStatus] =
-    useState<TRocket["rocketStatus"]["engineStatus"]>("SHUTDOWN");
+  const [engineStatus, setEngineStatus] = useState<TRocket["rocketStatus"]>({
+    isLoadGold: false,
+    isTakeOff: false,
+    isDropGold: false,
+    isLanding: false,
+  });
   // const engineStatus =
   //   "IGNITE" || "TAKE_OFF" || "SHUTDOWN" || "LANDING" || "CRUISING";
 
@@ -17,30 +21,51 @@ export const RocketEngineControlsLayout: React.FC = () => {
   // const isLanding: boolean = engineStatus === "LANDING";
   // const isShutdown: boolean = engineStatus === "SHUTDOWN";
 
-  const onIgniteEngineHandler = (checked: boolean) => {
-    console.log("checked Ignite engine: ", checked);
-    EventBus.emit("engineStatus", { engineStatus: "IGNITE" });
-    setEngineStatus(() => "IGNITE");
+  const onLoadGoldHandler = (checked: boolean) => {
+    console.log("checked loadGold engine: ", checked);
+    EventBus.emit("engineStatus", { engineStatus: "LOAD_GOLD" });
+    setEngineStatus({
+      isLoadGold: true,
+      isTakeOff: false,
+      isDropGold: false,
+      isLanding: false,
+    });
+    EventBus.emit("loadGold", { loadGold: true });
   };
 
-  const onShutdownEngineHandler = (checked: boolean) => {
-    console.log("checked shutdown engine: ", checked);
-    EventBus.emit("engineStatus", { engineStatus: "SHUTDOWN" });
-    setEngineStatus(() => "SHUTDOWN");
-  };
-
-  const onTakeOffEngineHandler = (checked: boolean) => {
+  const onTakeOffHandler = (checked: boolean) => {
     console.log("checked takeOff engine: ", checked);
     EventBus.emit("engineStatus", { engineStatus: "TAKE_OFF" });
-    setEngineStatus(() => "TAKE_OFF");
+    setEngineStatus({
+      isLoadGold: true,
+      isTakeOff: true,
+      isDropGold: false,
+      isLanding: false,
+    });
     if (!checked) return;
     EventBus.emit("takeOff", { takeOff: true });
   };
 
-  const onLandingEngineHandler = (checked: boolean) => {
+  const onDropGoldHandler = (checked: boolean) => {
+    console.log("checked drop gold engine: ", checked);
+    EventBus.emit("engineStatus", { engineStatus: "DROP_GOLD" });
+    setEngineStatus({
+      isLoadGold: true,
+      isTakeOff: true,
+      isDropGold: true,
+      isLanding: false,
+    });
+  };
+
+  const onLandingHandler = (checked: boolean) => {
     console.log("checked landing engine: ", checked);
     EventBus.emit("engineStatus", { engineStatus: "LANDING" });
-    setEngineStatus(() => "LANDING");
+    setEngineStatus({
+      isLoadGold: true,
+      isTakeOff: true,
+      isDropGold: true,
+      isLanding: true,
+    });
   };
 
   console.log("Engine Status: ", engineStatus);
@@ -49,23 +74,23 @@ export const RocketEngineControlsLayout: React.FC = () => {
     <div className=" rounded-lg flex flex-col gap-1 items-center justify-center">
       <RocketAccelerator />
       <RocketEngineControlSwitch
-        label="Shutdown Engine"
-        onCheckHandler={onShutdownEngineHandler}
-        disabled={false}
-      />
-      <RocketEngineControlSwitch
-        label="Ignite Engine"
-        onCheckHandler={onIgniteEngineHandler}
+        label="Load Gold"
+        onCheckHandler={onLoadGoldHandler}
         disabled={false}
       />
       <RocketEngineControlSwitch
         label="Take Off"
-        onCheckHandler={onTakeOffEngineHandler}
+        onCheckHandler={onTakeOffHandler}
+        disabled={false}
+      />
+      <RocketEngineControlSwitch
+        label="Drop Gold"
+        onCheckHandler={onDropGoldHandler}
         disabled={false}
       />
       <RocketEngineControlSwitch
         label="Landing"
-        onCheckHandler={onLandingEngineHandler}
+        onCheckHandler={onLandingHandler}
         disabled={false}
       />
     </div>
