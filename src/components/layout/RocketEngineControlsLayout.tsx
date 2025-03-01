@@ -18,6 +18,8 @@ export const RocketEngineControlsLayout: React.FC = () => {
     (state) => state.updateMarsGoldQuantity
   );
 
+  const updateCargo = useStatisticsStore((state) => state.updateCargo);
+
   const onLoadGoldHandler = (checked: boolean) => {
     if (!checked) return;
 
@@ -30,6 +32,7 @@ export const RocketEngineControlsLayout: React.FC = () => {
     EventBus.emit("engineStatus", engineStatus);
     updateEngineStatus(engineStatus);
     updateEarthGoldQuantity(33.3333);
+    updateCargo({ name: "Gold", quantity: 33.3333 });
   };
 
   const onTakeOffHandler = (checked: boolean) => {
@@ -58,6 +61,7 @@ export const RocketEngineControlsLayout: React.FC = () => {
     EventBus.emit("engineStatus", engineStatus);
     updateEngineStatus(engineStatus);
     updateMarsGoldQuantity(33.3333);
+    updateCargo({ name: "", quantity: 0 });
   };
 
   const onLandingHandler = (checked: boolean) => {
