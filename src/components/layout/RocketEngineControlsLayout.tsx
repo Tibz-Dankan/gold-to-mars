@@ -4,11 +4,18 @@ import { EventBus } from "../../game/EventBus";
 import {} from "react";
 import { RocketAccelerator } from "../UI/RocketAccelerator";
 import { useEngineStatusStore } from "../../store/engineStatus";
+import { useStatisticsStore } from "../../store/statistics";
 
 export const RocketEngineControlsLayout: React.FC = () => {
   const engineStatus = useEngineStatusStore((state) => state.engineStatus);
   const updateEngineStatus = useEngineStatusStore(
     (state) => state.updateEngineStatus
+  );
+  const updateEarthGoldQuantity = useStatisticsStore(
+    (state) => state.updateEarthGoldQuantity
+  );
+  const updateMarsGoldQuantity = useStatisticsStore(
+    (state) => state.updateMarsGoldQuantity
   );
 
   const onLoadGoldHandler = (checked: boolean) => {
@@ -22,6 +29,7 @@ export const RocketEngineControlsLayout: React.FC = () => {
     };
     EventBus.emit("engineStatus", engineStatus);
     updateEngineStatus(engineStatus);
+    updateEarthGoldQuantity(33.3333);
   };
 
   const onTakeOffHandler = (checked: boolean) => {
@@ -49,6 +57,7 @@ export const RocketEngineControlsLayout: React.FC = () => {
     };
     EventBus.emit("engineStatus", engineStatus);
     updateEngineStatus(engineStatus);
+    updateMarsGoldQuantity(33.3333);
   };
 
   const onLandingHandler = (checked: boolean) => {
