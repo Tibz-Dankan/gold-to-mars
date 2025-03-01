@@ -8,6 +8,7 @@ export const RocketCampus: React.FC = () => {
   const [direction, setDirection] = useState({ x: 0, y: 0 });
   const prevDistances = useRef({ earth: Infinity, mars: Infinity });
   const engineStatus = useEngineStatusStore((state) => state.engineStatus);
+  const takeOffStartTime = useRef<number | null>(null);
 
   const rocketPosition = useRef({ x: 0, y: 0 });
   const rocketPath = useRef<Array<{ x: number; y: number }>>([]);
@@ -153,10 +154,21 @@ export const RocketCampus: React.FC = () => {
           ? { x: 0, y: 0 }
           : { x: direction.x / magnitude, y: direction.y / magnitude };
 
+      const elapsedTime = (Date.now() - takeOffStartTime.current!) / 1000;
+
+      if (engineStatus.isTakeOff && takeOffStartTime.current === null) {
+        takeOffStartTime.current = Date.now();
+      }
+
       // Update rocket position (no re-render)
-      if (engineStatus.isTakeOff) {
+      if (engineStatus.isTakeOff && elapsedTime > 10) {
         rocketPosition.current.x += unitDirection.x * pixelsPerFrame;
         rocketPosition.current.y += unitDirection.y * pixelsPerFrame;
+      } else if (engineStatus.isTakeOff && elapsedTime <= 10) {
+        // Simulate rocket take off from earth
+        rocketPosition.current.x = earthX - centerX;
+        rocketPosition.current.y =
+          earthY - centerY - elapsedTime * pixelsPerFrame * 50;
       } else {
         // Rocket on earth before take off
         rocketPosition.current.x = earthX - centerX;

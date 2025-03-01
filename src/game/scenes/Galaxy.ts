@@ -24,6 +24,7 @@ export class GalaxyScene extends Scene {
     isDropGold: false,
     isLanding: false,
   };
+  private takeOffStartTime: number = 0;
 
   constructor() {
     super("GalaxyScene");
@@ -160,7 +161,15 @@ export class GalaxyScene extends Scene {
 
   handleRocketEngineStatus = (status: TRocket["rocketStatus"]) => {
     this.engineStatus = status;
-    // TODO: To listen for engine status and perform the necessary action
+    // set rocket face upwards on take off
+    if (this.engineStatus.isTakeOff && this.takeOffStartTime === 0) {
+      this.takeOffStartTime = Date.now();
+      const elapsedTime = (Date.now() - this.takeOffStartTime) / 1000;
+
+      if (this.takeOffStartTime > 0 && elapsedTime <= 10) {
+        this.rocket.setAngle(-Math.PI / 2);
+      }
+    }
   };
 
   renderSpace(worldWidth: number, worldHeight: number) {
