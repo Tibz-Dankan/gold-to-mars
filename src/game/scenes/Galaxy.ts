@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { TPlanet } from "../../types/planet";
 import { TRocket } from "../../types/rocketStatus";
+import { TRocketLocation } from "../../types/rocketLocation";
 
 export class GalaxyScene extends Scene {
   private rocket!: Phaser.Physics.Arcade.Sprite;
@@ -25,6 +26,14 @@ export class GalaxyScene extends Scene {
     isLanding: false,
   };
   private takeOffStartTime: number = 0;
+  private rocketLocation: TRocketLocation = {
+    location: "Earth",
+    isApproachingEarth: false,
+    isApproachingMars: false,
+    distanceToEarthKm: 0,
+    distanceToMarsKm: 0,
+    distanceFromEarthToMarsKm: 0,
+  };
 
   constructor() {
     super("GalaxyScene");
@@ -57,9 +66,6 @@ export class GalaxyScene extends Scene {
     this.rocket.setCollideWorldBounds(true);
     this.rocket.body!.debugShowBody = false;
 
-    // Set camera follow on the rocket
-    this.cameras.main.startFollow(this.rocket, false, 1, 1);
-
     this.mars = this.add
       .image(this.marsPositionX, this.marsPositionY, "mars")
       .setScale(1);
@@ -67,6 +73,17 @@ export class GalaxyScene extends Scene {
     this.earth = this.add
       .image(this.earthPositionX, this.earthPositionY, "earth")
       .setScale(1);
+
+    this.cameras.main.startFollow(this.rocket, false, 1, 1);
+
+    // // Set camera follow based on rocket location
+    // if (this.rocketLocation.location === "Earth") {
+    //   this.cameras.main.startFollow(this.earth, false, 1, 1);
+    // } else if (this.rocketLocation.location === "Mars") {
+    //   this.cameras.main.startFollow(this.mars, false, 1, 1);
+    // } else {
+    //   this.cameras.main.startFollow(this.rocket, false, 1, 1);
+    // }
 
     const particles = this.add.particles(0, 0, "fire", {
       lifespan: { min: 600, max: 1000 },
@@ -97,6 +114,10 @@ export class GalaxyScene extends Scene {
 
     EventBus.on("engineStatus", (status: TRocket["rocketStatus"]) =>
       this.handleRocketEngineStatus(status)
+    );
+
+    EventBus.on("rocketLocation", (location: TRocketLocation) =>
+      this.handleRocketLocation(location)
     );
   }
 
@@ -171,6 +192,10 @@ export class GalaxyScene extends Scene {
         this.rocket.setAngle(-Math.PI / 2);
       }
     }
+  };
+
+  handleRocketLocation = (location: TRocketLocation) => {
+    this.rocketLocation = location;
   };
 
   renderSpace(worldWidth: number, worldHeight: number) {
