@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { TPlanet } from "../../types/planet";
+import { TRocket } from "../../types/rocketStatus";
 
 export class GalaxyScene extends Scene {
   private rocket!: Phaser.Physics.Arcade.Sprite;
@@ -17,6 +18,12 @@ export class GalaxyScene extends Scene {
   private marsPositionY: number = 0;
   private rocketPositionX: number = 0;
   private rocketPositionY: number = 0;
+  private engineStatus: TRocket["rocketStatus"] = {
+    isLoadGold: false,
+    isTakeOff: false,
+    isDropGold: false,
+    isLanding: false,
+  };
 
   constructor() {
     super("GalaxyScene");
@@ -85,6 +92,10 @@ export class GalaxyScene extends Scene {
     EventBus.on("planetPosition", (position: TPlanet["planetPosition"]) =>
       this.handlePlanetPosition(position)
     );
+
+    EventBus.on("engineStatus", (status: TRocket["rocketStatus"]) =>
+      this.handleRocketEngineStatus(status)
+    );
   }
 
   // handleAcceleration(acceleration: number) {
@@ -146,6 +157,11 @@ export class GalaxyScene extends Scene {
       this.mars.setPosition(this.marsPositionX, this.marsPositionY);
     }
   }
+
+  handleRocketEngineStatus = (status: TRocket["rocketStatus"]) => {
+    this.engineStatus = status;
+    // TODO: To listen for engine status and perform the necessary action
+  };
 
   renderSpace(worldWidth: number, worldHeight: number) {
     // Ensure a solid black background
