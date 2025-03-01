@@ -53,6 +53,7 @@ export class GalaxyScene extends Scene {
       .sprite(this.rocketPositionX, this.rocketPositionY, "rocket")
       .setScale(0.25);
     this.rocket.setAngle(90);
+    this.rocket.setDepth(10);
     this.rocket.setCollideWorldBounds(true);
     this.rocket.body!.debugShowBody = false;
 
