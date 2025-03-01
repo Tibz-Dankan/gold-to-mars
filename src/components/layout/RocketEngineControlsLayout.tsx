@@ -20,7 +20,7 @@ export const RocketEngineControlsLayout: React.FC = () => {
       isDropGold: false,
       isLanding: false,
     };
-    EventBus.emit("engineStatus", { engineStatus: engineStatus });
+    EventBus.emit("engineStatus", engineStatus);
     updateEngineStatus(engineStatus);
   };
 
@@ -33,7 +33,7 @@ export const RocketEngineControlsLayout: React.FC = () => {
       isDropGold: false,
       isLanding: false,
     };
-    EventBus.emit("engineStatus", { engineStatus: engineStatus });
+    EventBus.emit("engineStatus", engineStatus);
     EventBus.emit("takeOff", { takeOff: true });
     updateEngineStatus(engineStatus);
   };
@@ -47,7 +47,7 @@ export const RocketEngineControlsLayout: React.FC = () => {
       isDropGold: true,
       isLanding: false,
     };
-    EventBus.emit("engineStatus", { engineStatus: engineStatus });
+    EventBus.emit("engineStatus", engineStatus);
     updateEngineStatus(engineStatus);
   };
 
@@ -60,7 +60,7 @@ export const RocketEngineControlsLayout: React.FC = () => {
       isDropGold: true,
       isLanding: true,
     };
-    EventBus.emit("engineStatus", { engineStatus: engineStatus });
+    EventBus.emit("engineStatus", engineStatus);
     updateEngineStatus(engineStatus);
   };
 
