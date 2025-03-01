@@ -202,7 +202,7 @@ export class GalaxyScene extends Scene {
     // Ensure a solid black background
     this.add.rectangle(0, 0, worldWidth, worldHeight, 0x000000).setOrigin(0);
 
-    const totalStars = 1000; // Increase stars for a larger space
+    const totalStars = 1250; // Increase stars for a larger space
 
     for (let i = 0; i < totalStars; i++) {
       const x = Math.random() * worldWidth;
