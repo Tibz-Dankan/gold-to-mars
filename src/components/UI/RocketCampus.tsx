@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { EventBus } from "../../game/EventBus";
 import { isApproaching } from "../../utils/isApproaching";
+import { useEngineStatusStore } from "../../store/engineStatus";
 
 export const RocketCampus: React.FC = () => {
   const [acceleration, setAcceleration] = useState(0);
   const [direction, setDirection] = useState({ x: 0, y: 0 });
   const prevDistances = useRef({ earth: Infinity, mars: Infinity });
+  const engineStatus = useEngineStatusStore((state) => state.engineStatus);
 
   const rocketPosition = useRef({ x: 0, y: 0 });
   const rocketPath = useRef<Array<{ x: number; y: number }>>([]);
@@ -152,8 +154,14 @@ export const RocketCampus: React.FC = () => {
           : { x: direction.x / magnitude, y: direction.y / magnitude };
 
       // Update rocket position (no re-render)
-      rocketPosition.current.x += unitDirection.x * pixelsPerFrame;
-      rocketPosition.current.y += unitDirection.y * pixelsPerFrame;
+      if (engineStatus.isTakeOff) {
+        rocketPosition.current.x += unitDirection.x * pixelsPerFrame;
+        rocketPosition.current.y += unitDirection.y * pixelsPerFrame;
+      } else {
+        // Rocket on earth before take off
+        rocketPosition.current.x = earthX - centerX;
+        rocketPosition.current.y = earthY - centerY;
+      }
 
       // Save rocket path (no re-render)
       rocketPath.current.push({
@@ -276,7 +284,7 @@ export const RocketCampus: React.FC = () => {
 
     drawScene();
     return () => cancelAnimationFrame(animationFrameId);
-  }, [direction, acceleration]);
+  }, [direction, acceleration, engineStatus]);
 
   return (
     <div
