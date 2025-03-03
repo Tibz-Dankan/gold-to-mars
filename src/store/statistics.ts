@@ -23,33 +23,14 @@ export const useStatisticsStore = create<
   },
   cargo: { name: "", quantity: 0 },
   updateStatistics: (statistics) => set(() => ({ statistics: statistics })),
-  // updateMarsGoldQuantity: (goldQuantity) =>
-  //   set(() => {
-  //     const statistics = get().statistics;
-  //     statistics.marsGoldQuantity = statistics.marsGoldQuantity + goldQuantity;
-  //     statistics.goldValue = statistics.goldValue + 3;
-  //     statistics.btcValue = statistics.btcValue + 8;
-
-  //     return { statistics: statistics };
-  //   }),
   updateMarsGoldQuantity: (goldQuantity) =>
-    // set(() => {
-    //   const statistics = get().statistics;
-    //   statistics.marsGoldQuantity = statistics.marsGoldQuantity + goldQuantity;
-    //   statistics.goldValue = statistics.goldValue + 3;
-    //   statistics.btcValue = statistics.btcValue + 8;
-
-    //   return { statistics: statistics };
-    // }),
     set(
       produce((state) => {
         const statistics = get().statistics;
-        statistics.marsGoldQuantity =
+        state.statistics.marsGoldQuantity =
           statistics.marsGoldQuantity + goldQuantity;
-        statistics.goldValue = statistics.goldValue + 3;
-        statistics.btcValue = statistics.btcValue + 8;
-        state.statistics = statistics;
-        // state.onlineStatusMap.set(status.userID, status);
+        state.statistics.goldValue = statistics.goldValue + 3;
+        state.statistics.btcValue = statistics.btcValue + 8;
       })
     ),
   updateEarthGoldQuantity: (goldQuantity) =>

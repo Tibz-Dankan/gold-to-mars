@@ -26,7 +26,8 @@ export class Preloader extends Scene {
     this.load.image("mars", "mars.png");
     this.load.image("rocket", "rocket.png");
     this.load.image("outer-space-1", "outer-space-1.png");
-
+    this.load.image("gold", "gold.png");
+    this.load.image("gold-2", "gold-2.png");
     // Load complete handler
     this.load.on("complete", () => {
       this.scene.start("Game"); // Switch to Game scene

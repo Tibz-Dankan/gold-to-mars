@@ -7,9 +7,9 @@ import { ControlPadScene } from "./scenes/ControlPad";
 // import { RocketStatusDisplayScene } from "./scenes/RocketStatusDisplay";
 import { ControlLayout } from "../components/layout/ControlLayout";
 // import { TravellingScene } from "./scenes/Travelling";
-import { TakeOffScene } from "./scenes/TakeOff";
-import { SpaceScene } from "./scenes/Space";
-import { DropGoldScene } from "./scenes/DropGold";
+// import { TakeOffScene } from "./scenes/TakeOff";
+// import { SpaceScene } from "./scenes/Space";
+// import { DropGoldScene } from "./scenes/DropGold";
 import { GalaxyScene } from "./scenes/Galaxy";
 import { RocketStatusDisplay } from "../components/UI/RocketStatusDisplay";
 import { RocketLocation } from "../components/UI/RocketLocation";
@@ -33,9 +33,9 @@ export function PhaserGame() {
         ControlPadScene,
         // RocketStatusDisplayScene,
         // TravellingScene,
-        TakeOffScene,
-        SpaceScene,
-        DropGoldScene,
+        // TakeOffScene,
+        // SpaceScene,
+        // DropGoldScene,
         GalaxyScene,
       ],
       physics: {

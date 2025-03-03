@@ -35,6 +35,9 @@ export class GalaxyScene extends Scene {
     distanceFromEarthToMarsKm: 0,
   };
 
+  // private gold!: Phaser.GameObjects.Image;
+  private gold!: Phaser.Physics.Arcade.Sprite;
+
   constructor() {
     super("GalaxyScene");
   }
@@ -73,6 +76,13 @@ export class GalaxyScene extends Scene {
     this.earth = this.add
       .image(this.earthPositionX, this.earthPositionY, "earth")
       .setScale(1);
+
+    this.gold = this.physics.add
+      .sprite(this.rocketPositionX, this.rocketPositionY, "gold")
+      // .sprite(worldWidth * 0.5, worldHeight * 0.5, "gold")
+      .setScale(0.15)
+      .setDepth(20)
+      .setVisible(true);
 
     this.cameras.main.startFollow(this.rocket, false, 1, 1);
 
@@ -182,6 +192,7 @@ export class GalaxyScene extends Scene {
   }
 
   handleRocketEngineStatus = (status: TRocket["rocketStatus"]) => {
+    console.log("status: ", status);
     this.engineStatus = status;
     // set rocket face upwards on take off
     if (this.engineStatus.isTakeOff && this.takeOffStartTime === 0) {
@@ -190,6 +201,14 @@ export class GalaxyScene extends Scene {
 
       if (this.takeOffStartTime > 0 && elapsedTime <= 10) {
         this.rocket.setAngle(-Math.PI / 2);
+      }
+      // if (this.engineStatus.isDropGold) {
+      if (this.engineStatus.isDropGold) {
+        console.log(
+          "this.engineStatus.isDropGold: ",
+          this.engineStatus.isDropGold
+        );
+        this.dropGold();
       }
     }
   };
@@ -229,7 +248,7 @@ export class GalaxyScene extends Scene {
   }
 
   update(_: number, __: number) {
-    this.updateParticlePosition(); // Update flame position
+    // this.updateParticlePosition(); // Update flame position
   }
 
   private updateParticlePosition() {
@@ -244,5 +263,26 @@ export class GalaxyScene extends Scene {
     this.particleEmitter.setAngle(
       this.rocket.rotation * Phaser.Math.RAD_TO_DEG
     );
+  }
+  private dropGold() {
+    console.log("Inside drop gold");
+
+    this.gold.setPosition(this.rocket.x, this.rocket.x); // Position the gold on Mars
+
+    // Enable physics for the gold sprite
+    this.physics.world.enable(this.gold);
+    this.gold.setGravityY(100);
+    // this.gold.body.setGravityY(300);
+
+    // Set the gold sprite as a dynamic body
+    this.gold.setVelocity(0, 200); // Add downward velocity to make it fall
+
+    // Create a collider for the gold to interact with Mars
+    this.physics.add.collider(this.gold, this.mars, (gold, mars) => {
+      // Once it hits Mars, stop the gold's velocity and make it stick to Mars
+      // this.gold.setVelocity(0, 0); // Stop the gold from moving
+      // this.gold.setPosition(this.mars.x, this.mars.y); // Position the gold on Mars
+      this.gold.setAlpha(1); // Make gold visible when it reaches Mars
+    });
   }
 }
