@@ -2,16 +2,34 @@ import React, { useState, useEffect, useRef } from "react";
 import { EventBus } from "../../game/EventBus";
 import { isApproaching } from "../../utils/isApproaching";
 import { useEngineStatusStore } from "../../store/engineStatus";
+import { TRocket } from "../../types/rocketStatus";
+import { useStatisticsStore } from "../../store/statistics";
 
 export const RocketCampus: React.FC = () => {
   const [acceleration, setAcceleration] = useState(0);
   const [direction, setDirection] = useState({ x: 0, y: 0 });
   const prevDistances = useRef({ earth: Infinity, mars: Infinity });
   const engineStatus = useEngineStatusStore((state) => state.engineStatus);
+  const updateEngineStatus = useEngineStatusStore(
+    (state) => state.updateEngineStatus
+  );
   const takeOffStartTime = useRef<number | null>(null);
+  const [engineStatusViaEvent, setEngineStatusViaEvent] = useState<
+    TRocket["rocketStatus"]
+  >({
+    isLoadGold: false,
+    isTakeOff: false,
+    isDropGold: false,
+    isLanding: false,
+  });
+  const updateMarsGoldQuantity = useStatisticsStore(
+    (state) => state.updateMarsGoldQuantity
+  );
+  const updateCargo = useStatisticsStore((state) => state.updateCargo);
 
   const rocketPosition = useRef({ x: 0, y: 0 });
   const rocketPath = useRef<Array<{ x: number; y: number }>>([]);
+  const resetGame = useRef<boolean>(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -24,8 +42,15 @@ export const RocketCampus: React.FC = () => {
       setAcceleration(acceleration);
     };
 
+    const handleEngineStatusViaEvent = (
+      engineStatus: TRocket["rocketStatus"]
+    ) => {
+      setEngineStatusViaEvent(engineStatus);
+    };
+
     EventBus.on("padMove", handlePadMove);
     EventBus.on("acceleration", handleAcceleration);
+    EventBus.on("engineStatus", handleEngineStatusViaEvent);
 
     return () => {
       EventBus.off("padMove", handlePadMove);
@@ -158,6 +183,7 @@ export const RocketCampus: React.FC = () => {
 
       if (engineStatus.isTakeOff && takeOffStartTime.current === null) {
         takeOffStartTime.current = Date.now();
+        resetGame.current = false;
       }
 
       // Update rocket position (no re-render)
@@ -173,6 +199,27 @@ export const RocketCampus: React.FC = () => {
         // Rocket on earth before take off
         rocketPosition.current.x = earthX - centerX;
         rocketPosition.current.y = earthY - centerY;
+      }
+
+      if (engineStatusViaEvent.isDropGold) {
+        // Reposition rocket to earth when gold is dropped on mars
+        rocketPosition.current.x = earthX - centerX;
+        rocketPosition.current.y = earthY - centerY;
+        if (!resetGame.current) {
+          // update mars and cargo
+          updateMarsGoldQuantity(33.3333);
+          updateCargo({ name: "", quantity: 0 });
+          // Reset engine status
+          updateEngineStatus({
+            isLoadGold: false,
+            isTakeOff: false,
+            isDropGold: false,
+            isLanding: false,
+          });
+          resetGame.current = true;
+          takeOffStartTime.current = null;
+          EventBus.emit("takeOff", { takeOff: false });
+        }
       }
 
       // Save rocket path (no re-render)
@@ -296,7 +343,7 @@ export const RocketCampus: React.FC = () => {
 
     drawScene();
     return () => cancelAnimationFrame(animationFrameId);
-  }, [direction, acceleration, engineStatus]);
+  }, [direction, acceleration, engineStatus, engineStatusViaEvent]);
 
   return (
     <div

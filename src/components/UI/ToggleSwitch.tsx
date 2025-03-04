@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Switch from "react-switch";
 import { twMerge } from "tailwind-merge";
 
@@ -19,12 +19,16 @@ interface ToggleSwitchProps {
 }
 
 export const ToggleSwitch: React.FC<ToggleSwitchProps> = (props) => {
-  const [checked, setChecked] = useState(props.checked ? props.checked : false);
+  const [checked, setChecked] = useState(false);
 
   const onChangeHandler = (checked: boolean) => {
     setChecked(() => checked);
     props.onCheck(checked);
   };
+
+  useEffect(() => {
+    setChecked(() => props.checked);
+  }, [props.checked]);
 
   return (
     <label>

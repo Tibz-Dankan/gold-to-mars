@@ -4,6 +4,7 @@ import { ToggleSwitch } from "./ToggleSwitch";
 type RocketPilotEngineControlsProps = {
   label: string;
   disabled: boolean;
+  checked: boolean;
   onCheckHandler: (checked: boolean) => void;
 };
 
@@ -32,7 +33,7 @@ export const RocketEngineControlSwitch: React.FC<
       <ToggleSwitch
         disabled={props.disabled}
         onCheck={props.onCheckHandler}
-        checked={props.disabled}
+        checked={props.checked}
         checkedIcon={<div />}
         uncheckedIcon={<div />}
         offColor={gray5}
