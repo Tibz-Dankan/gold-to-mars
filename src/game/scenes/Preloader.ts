@@ -28,6 +28,33 @@ export class Preloader extends Scene {
     this.load.image("outer-space-1", "outer-space-1.png");
     this.load.image("gold", "gold.png");
     this.load.image("gold-2", "gold-2.png");
+    // this.load.audio(
+    //   "ambientSound001",
+    //   "sound/ambient-soundscapes-001-space-atmosphere.mp3"
+    // );
+    // this.load.audio(
+    //   "ambientSound003",
+    //   "sound/ambient-soundscapes-003-space-atmosphere.mp3"
+    // );
+    // this.load.audio(
+    //   "ambientSound004",
+    //   "sound/ambient-soundscapes-004-space-atmosphere.mp3"
+    // );
+    this.load.audio(
+      "ambientSound007",
+      "sound/ambient-soundscapes-007-space-atmosphere.mp3"
+    );
+    // this.load.audio(
+    //   "interstellarTurbulenceSound",
+    //   "sound/interstellar-turbulence-galactic-roar-fnx-sound.mp3"
+    // );
+    // this.load.audio(
+    //   "burningRocketSound",
+    //   "sound/fx-looking-straight-into-a-burning-rocket-engine.mp3"
+    // );
+    this.load.audio("explosionSound", "sound/bad-explosion.mp3");
+    this.load.audio("blockSound", "sound/block.mp3");
+
     // Load complete handler
     this.load.on("complete", () => {
       this.scene.start("Game"); // Switch to Game scene

@@ -25,8 +25,28 @@ export class GalaxyScene extends Scene {
     isLanding: false,
   };
   private takeOffStartTime: number = 0;
+  private soundOn: boolean = true;
+  private explosionSound:
+    | Phaser.Sound.NoAudioSound
+    | Phaser.Sound.HTML5AudioSound
+    | Phaser.Sound.WebAudioSound
+    | null = null;
+  private blockSound:
+    | Phaser.Sound.NoAudioSound
+    | Phaser.Sound.HTML5AudioSound
+    | Phaser.Sound.WebAudioSound
+    | null = null;
+  // private interstellarTurbulenceSound:
+  //   | Phaser.Sound.NoAudioSound
+  //   | Phaser.Sound.HTML5AudioSound
+  //   | Phaser.Sound.WebAudioSound
+  //   | null = null;
 
-  // private gold!: Phaser.Physics.Arcade.Sprite;
+  private ambientSound007:
+    | Phaser.Sound.NoAudioSound
+    | Phaser.Sound.HTML5AudioSound
+    | Phaser.Sound.WebAudioSound
+    | null = null;
 
   constructor() {
     super("GalaxyScene");
@@ -93,6 +113,19 @@ export class GalaxyScene extends Scene {
     this.particleEmitter = particles;
     this.updateParticlePosition(); // Initial position
 
+    this.explosionSound = this.sound.add("explosionSound");
+    this.blockSound = this.sound.add("blockSound");
+    // this.interstellarTurbulenceSound = this.sound.add(
+    //   "interstellarTurbulenceSound",
+    //   { loop: true }
+    // );
+    this.ambientSound007 = this.sound.add("ambientSound007", { loop: true });
+    this.ambientSound007.setVolume(0.5);
+    // this.interstellarTurbulenceSound!.play();
+    if (this.soundOn) {
+      this.ambientSound007!.play();
+    }
+
     this.physics.add.collider(
       this.rocket,
       this.mars,
@@ -111,6 +144,10 @@ export class GalaxyScene extends Scene {
 
     EventBus.on("engineStatus", (status: TRocket["rocketStatus"]) =>
       this.handleRocketEngineStatus(status)
+    );
+
+    EventBus.on("soundOn", (sound: { soundOn: boolean }) =>
+      this.handleSound(sound)
     );
   }
 
@@ -175,10 +212,26 @@ export class GalaxyScene extends Scene {
     if (this.engineStatus.isTakeOff && this.takeOffStartTime === 0) {
       this.takeOffStartTime = Date.now();
       const elapsedTime = (Date.now() - this.takeOffStartTime) / 1000;
+      console.log("started journey to mars");
+      // this.interstellarTurbulenceSound!.play();
 
       if (this.takeOffStartTime > 0 && elapsedTime <= 10) {
         this.rocket.setAngle(-Math.PI / 2);
       }
+    }
+    if (this.engineStatus.isLoadGold && !this.engineStatus.isTakeOff) {
+      if (this.soundOn) {
+        this.blockSound!.play();
+      }
+    }
+  };
+
+  handleSound = (sound: { soundOn: boolean }) => {
+    this.soundOn = sound.soundOn;
+    if (sound.soundOn) {
+      this.sound.setVolume(1);
+    } else {
+      this.sound.setVolume(0);
     }
   };
 
@@ -226,6 +279,11 @@ export class GalaxyScene extends Scene {
 
     this.rocket.setPosition(this.marsPositionX, this.marsPositionY);
     this.rocket.setVisible(false);
+    // this.interstellarTurbulenceSound!.stop();
+    if (this.soundOn) {
+      this.explosionSound!.play();
+    }
+    this.takeOffStartTime = 0;
     setTimeout(() => {
       particles.destroy();
     }, 1000);

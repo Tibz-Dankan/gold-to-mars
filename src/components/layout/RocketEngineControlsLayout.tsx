@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { RocketEngineControlSwitch } from "../UI/RocketEngineControlSwitch";
 import { EventBus } from "../../game/EventBus";
 import {} from "react";
@@ -7,6 +7,7 @@ import { useEngineStatusStore } from "../../store/engineStatus";
 import { useStatisticsStore } from "../../store/statistics";
 
 export const RocketEngineControlsLayout: React.FC = () => {
+  const [soundOn, setSoundOn] = useState<boolean>(true);
   const engineStatus = useEngineStatusStore((state) => state.engineStatus);
   const updateEngineStatus = useEngineStatusStore(
     (state) => state.updateEngineStatus
@@ -55,6 +56,11 @@ export const RocketEngineControlsLayout: React.FC = () => {
     updateEngineStatus(engineStatus);
   };
 
+  const onSoundHandler = (checked: boolean) => {
+    EventBus.emit("soundOn", { soundOn: checked });
+    setSoundOn(() => checked);
+  };
+
   return (
     <div className=" rounded-lg flex flex-col gap-1 items-center justify-center">
       <RocketAccelerator />
@@ -69,6 +75,12 @@ export const RocketEngineControlsLayout: React.FC = () => {
         onCheckHandler={onTakeOffHandler}
         disabled={false}
         checked={engineStatus.isTakeOff}
+      />
+      <RocketEngineControlSwitch
+        label="Sound"
+        onCheckHandler={onSoundHandler}
+        disabled={false}
+        checked={soundOn}
       />
     </div>
   );
