@@ -11,11 +11,15 @@ export const RocketEngineControlsLayout: React.FC = () => {
   const updateEngineStatus = useEngineStatusStore(
     (state) => state.updateEngineStatus
   );
+  const updateEngineStatusTakeOff = useEngineStatusStore(
+    (state) => state.updateTakeOff
+  );
+  const updateEngineStatusLoadGold = useEngineStatusStore(
+    (state) => state.updateLoadGold
+  );
+
   const updateEarthGoldQuantity = useStatisticsStore(
     (state) => state.updateEarthGoldQuantity
-  );
-  const updateMarsGoldQuantity = useStatisticsStore(
-    (state) => state.updateMarsGoldQuantity
   );
 
   const updateCargo = useStatisticsStore((state) => state.updateCargo);
@@ -30,7 +34,8 @@ export const RocketEngineControlsLayout: React.FC = () => {
       isLanding: false,
     };
     EventBus.emit("engineStatus", engineStatus);
-    updateEngineStatus(engineStatus);
+    // updateEngineStatus(engineStatus);
+    updateEngineStatusLoadGold(true);
     updateEarthGoldQuantity(33.3333);
     updateCargo({ name: "Gold", quantity: 33.3333 });
   };
@@ -44,40 +49,11 @@ export const RocketEngineControlsLayout: React.FC = () => {
       isDropGold: false,
       isLanding: false,
     };
-    EventBus.emit("engineStatus", engineStatus);
+    // EventBus.emit("engineStatus", engineStatus);
+    updateEngineStatusTakeOff(true);
     EventBus.emit("takeOff", { takeOff: true });
     updateEngineStatus(engineStatus);
   };
-
-  const onDropGoldHandler = (checked: boolean) => {
-    if (!checked) return;
-
-    const engineStatus = {
-      isLoadGold: true,
-      isTakeOff: true,
-      isDropGold: true,
-      isLanding: false,
-    };
-    EventBus.emit("engineStatus", engineStatus);
-    updateEngineStatus(engineStatus);
-    updateMarsGoldQuantity(33.3333);
-    updateCargo({ name: "", quantity: 0 });
-  };
-
-  const onLandingHandler = (checked: boolean) => {
-    if (!checked) return;
-
-    const engineStatus = {
-      isLoadGold: true,
-      isTakeOff: true,
-      isDropGold: true,
-      isLanding: true,
-    };
-    EventBus.emit("engineStatus", engineStatus);
-    updateEngineStatus(engineStatus);
-  };
-
-  console.log("engineStatus: ", engineStatus);
 
   return (
     <div className=" rounded-lg flex flex-col gap-1 items-center justify-center">
@@ -86,21 +62,13 @@ export const RocketEngineControlsLayout: React.FC = () => {
         label="Load Gold"
         onCheckHandler={onLoadGoldHandler}
         disabled={false}
+        checked={engineStatus.isLoadGold}
       />
       <RocketEngineControlSwitch
         label="Take Off"
         onCheckHandler={onTakeOffHandler}
         disabled={false}
-      />
-      <RocketEngineControlSwitch
-        label="Drop Gold"
-        onCheckHandler={onDropGoldHandler}
-        disabled={false}
-      />
-      <RocketEngineControlSwitch
-        label="Landing"
-        onCheckHandler={onLandingHandler}
-        disabled={false}
+        checked={engineStatus.isTakeOff}
       />
     </div>
   );

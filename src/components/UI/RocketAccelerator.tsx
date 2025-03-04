@@ -25,13 +25,44 @@ export const RocketAccelerator: React.FC = () => {
     setPosition(() => newPosition);
   };
 
+  // useEffect(() => {
+  //   const handleTakeOff = ({ takeOff }: { takeOff: boolean }) => {
+  //     if (takeOff) {
+  //       let start = position;
+  //       let end = 100;
+  //       let duration = 500;
+  //       // let duration = 3000;
+  //       let startTime = performance.now();
+
+  //       const animate = (currentTime: number) => {
+  //         let elapsed = currentTime - startTime;
+  //         let progress = Math.min(elapsed / duration, 1); // Ensure it doesn't exceed 100%
+
+  //         let newPosition = start + (end - start) * progress;
+  //         setPosition(newPosition);
+  //         EventBus.emit("acceleration", { acceleration: newPosition });
+
+  //         if (progress < 1) {
+  //           requestAnimationFrame(animate);
+  //         }
+  //       };
+
+  //       requestAnimationFrame(animate);
+  //     }
+  //   };
+
+  //   EventBus.on("takeOff", handleTakeOff);
+  //   return () => {
+  //     EventBus.off("takeOff", handleTakeOff);
+  //   };
+  // }, [position]);
+
   useEffect(() => {
     const handleTakeOff = ({ takeOff }: { takeOff: boolean }) => {
       if (takeOff) {
         let start = position;
         let end = 100;
         let duration = 500;
-        // let duration = 3000;
         let startTime = performance.now();
 
         const animate = (currentTime: number) => {
@@ -48,6 +79,9 @@ export const RocketAccelerator: React.FC = () => {
         };
 
         requestAnimationFrame(animate);
+      } else {
+        setPosition(0);
+        EventBus.emit("acceleration", { acceleration: 0 });
       }
     };
 

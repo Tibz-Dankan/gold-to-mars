@@ -34,11 +34,12 @@ export const useStatisticsStore = create<
       })
     ),
   updateEarthGoldQuantity: (goldQuantity) =>
-    set(() => {
-      const statistics = get().statistics;
-      statistics.earthGoldQuantity =
-        statistics.earthGoldQuantity - goldQuantity;
-      return { statistics: statistics };
-    }),
+    set(
+      produce((state) => {
+        const statistics = get().statistics;
+        state.statistics.earthGoldQuantity =
+          statistics.earthGoldQuantity - goldQuantity;
+      })
+    ),
   updateCargo: (cargo) => set(() => ({ cargo: cargo })),
 }));
