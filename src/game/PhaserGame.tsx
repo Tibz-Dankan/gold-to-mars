@@ -2,14 +2,8 @@ import { useLayoutEffect } from "react";
 import Phaser from "phaser";
 import { Preloader } from "./scenes/Preloader";
 import { Game } from "./scenes/Game";
-// import { FireScene } from "./scenes/Fire";
 import { ControlPadScene } from "./scenes/ControlPad";
-// import { RocketStatusDisplayScene } from "./scenes/RocketStatusDisplay";
 import { ControlLayout } from "../components/layout/ControlLayout";
-// import { TravellingScene } from "./scenes/Travelling";
-// import { TakeOffScene } from "./scenes/TakeOff";
-// import { SpaceScene } from "./scenes/Space";
-// import { DropGoldScene } from "./scenes/DropGold";
 import { GalaxyScene } from "./scenes/Galaxy";
 import { RocketStatusDisplay } from "../components/UI/RocketStatusDisplay";
 import { RocketLocation } from "../components/UI/RocketLocation";
@@ -26,18 +20,7 @@ export function PhaserGame() {
       height,
       parent: "game-container",
       backgroundColor: "#212529",
-      scene: [
-        Preloader,
-        Game,
-        // FireScene,
-        ControlPadScene,
-        // RocketStatusDisplayScene,
-        // TravellingScene,
-        // TakeOffScene,
-        // SpaceScene,
-        // DropGoldScene,
-        GalaxyScene,
-      ],
+      scene: [Preloader, Game, ControlPadScene, GalaxyScene],
       physics: {
         default: "arcade",
         arcade: {
@@ -52,10 +35,6 @@ export function PhaserGame() {
 
     game.events.once("ready", () => {
       game.scene.start("ControlPadScene");
-      // game.scene.start("RocketStatusDisplayScene");
-      // game.scene.start("TravellingScene");
-      // game.scene.start("FireScene");
-      // game.scene.start("TakeOffScene");
     });
 
     // Handle resizing without zoom animation

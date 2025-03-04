@@ -2,7 +2,6 @@ import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { TPlanet } from "../../types/planet";
 import { TRocket } from "../../types/rocketStatus";
-import { TRocketLocation } from "../../types/rocketLocation";
 
 export class GalaxyScene extends Scene {
   private rocket!: Phaser.Physics.Arcade.Sprite;
@@ -26,16 +25,8 @@ export class GalaxyScene extends Scene {
     isLanding: false,
   };
   private takeOffStartTime: number = 0;
-  private rocketLocation: TRocketLocation = {
-    location: "Earth",
-    isApproachingEarth: false,
-    isApproachingMars: false,
-    distanceToEarthKm: 0,
-    distanceToMarsKm: 0,
-    distanceFromEarthToMarsKm: 0,
-  };
 
-  private gold!: Phaser.Physics.Arcade.Sprite;
+  // private gold!: Phaser.Physics.Arcade.Sprite;
 
   constructor() {
     super("GalaxyScene");
@@ -77,24 +68,15 @@ export class GalaxyScene extends Scene {
       .image(this.earthPositionX, this.earthPositionY, "earth")
       .setScale(1);
 
-    // TODO: To change the position of rocket to mars but invisible initially
-    // and visible on crash
-    this.gold = this.physics.add
-      .sprite(this.marsPositionX, this.marsPositionY, "gold")
-      .setScale(0.25)
-      .setDepth(20)
-      .setVisible(false);
+    // // TODO: To change the position of rocket to mars but invisible initially
+    // // and visible on crash
+    // this.gold = this.physics.add
+    //   .sprite(this.marsPositionX, this.marsPositionY, "gold")
+    //   .setScale(0.25)
+    //   .setDepth(20)
+    //   .setVisible(false);
 
     this.cameras.main.startFollow(this.rocket, false, 1, 1);
-
-    // // Set camera follow based on rocket location
-    // if (this.rocketLocation.location === "Earth") {
-    //   this.cameras.main.startFollow(this.earth, false, 1, 1);
-    // } else if (this.rocketLocation.location === "Mars") {
-    //   this.cameras.main.startFollow(this.mars, false, 1, 1);
-    // } else {
-    //   this.cameras.main.startFollow(this.rocket, false, 1, 1);
-    // }
 
     const particles = this.add.particles(0, 0, "fire", {
       lifespan: { min: 600, max: 1000 },
@@ -123,10 +105,6 @@ export class GalaxyScene extends Scene {
       this.handlePadMove(direction)
     );
 
-    // EventBus.on("acceleration", ({ acceleration }: { acceleration: number }) =>
-    //   this.handleAcceleration(acceleration)
-    // );
-
     EventBus.on("planetPosition", (position: TPlanet["planetPosition"]) =>
       this.handlePlanetPosition(position)
     );
@@ -134,16 +112,7 @@ export class GalaxyScene extends Scene {
     EventBus.on("engineStatus", (status: TRocket["rocketStatus"]) =>
       this.handleRocketEngineStatus(status)
     );
-
-    EventBus.on("rocketLocation", (location: TRocketLocation) =>
-      this.handleRocketLocation(location)
-    );
   }
-
-  // handleAcceleration(acceleration: number) {
-  //   const speedKmH = (acceleration / 100) * this.speedLimit;
-  //   const rocketPixelsPerFrame = (speedKmH / 3600) * 0.005; //0.005 pixels per second
-  // }
 
   handlePadMove = (direction: { x: number; y: number }) => {
     // Calculate magnitude (length) of direction vector
@@ -219,10 +188,6 @@ export class GalaxyScene extends Scene {
         );
       }
     }
-  };
-
-  handleRocketLocation = (location: TRocketLocation) => {
-    this.rocketLocation = location;
   };
 
   renderSpace(worldWidth: number, worldHeight: number) {
