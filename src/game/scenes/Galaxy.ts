@@ -170,7 +170,6 @@ export class GalaxyScene extends Scene {
   }
 
   handleRocketEngineStatus = (status: TRocket["rocketStatus"]) => {
-    console.log("status: ", status);
     this.engineStatus = status;
     // set rocket face upwards on take off
     if (this.engineStatus.isTakeOff && this.takeOffStartTime === 0) {
