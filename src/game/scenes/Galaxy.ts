@@ -179,13 +179,6 @@ export class GalaxyScene extends Scene {
       if (this.takeOffStartTime > 0 && elapsedTime <= 10) {
         this.rocket.setAngle(-Math.PI / 2);
       }
-      // if (this.engineStatus.isDropGold) {
-      if (this.engineStatus.isDropGold) {
-        console.log(
-          "this.engineStatus.isDropGold: ",
-          this.engineStatus.isDropGold
-        );
-      }
     }
   };
 
